@@ -1,0 +1,40 @@
+services:
+  # ------------------------
+  # Media Server
+  # ------------------------
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    container_name: audiobookshelf
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ./data/media/audiobooks:/audiobooks
+      - ./data/media/podcasts:/podcasts
+      - ./apps/audiobookshelf/config:/config
+      - ./apps/audiobookshelf/metadata:/metadata
+    ports:
+      - "13378:80"
+    restart: unless-stopped
+  # ------------------------
+  # Misc
+  # ------------------------
+  netronome:
+    image: ghcr.io/autobrr/netronome:latest
+    container_name: netronome
+    user: 1000:1000
+    volumes:
+      - ./apps/netronome/config:/data
+    ports:
+      - "7575:7575"
+    restart: unless-stopped
+  netronome-agent:
+    image: ghcr.io/autobrr/netronome:latest
+    container_name: netronome-agent
+    user: 1000:1000
+    command: [ "agent" ]
+    # docker compose exec netronome-agent apk add vnstat
+    volumes:
+      - ./apps/netronome-agent/config:/data
+    ports:
+      - "8200:8200"
+    restart: unless-stopped

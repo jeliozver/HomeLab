@@ -1,0 +1,80 @@
+# Global config
+{
+  # Global logging   
+  log {
+    output file /var/log/caddy/access.log
+    format json
+  }
+}
+
+# TLS Config Porkbun
+(tls_porkbun) {
+  tls {
+    dns porkbun {
+      api_key {$PORKBUN_API_KEY}
+      api_secret_key {$PORKBUN_API_SECRET}
+    }
+  }
+}
+
+# Common headers
+(headers) {
+  header {
+    -Server
+    Strict-Transport-Security "max-age=63072000"
+
+    # Opt-out search engines
+    X-Robots-Tag "noindex, nofollow, nosnippet, noarchive"
+  }
+}
+
+# Common encoding
+(encoding) {
+  encode zstd gzip
+}
+
+# Jellyfin subdomain config
+jellyfin.example.com {
+  import tls_porkbun
+  import headers
+  import encoding
+  
+  # Logging config
+  log {
+    output file /var/log/caddy/jellyfin-access.log
+    format json
+  }
+  
+  # Allowed IP's
+  @allowed remote_ip 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8 127.0.0.1/8
+  
+  # Block all rest IP's
+  @blocked not remote_ip 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8 127.0.0.1/8
+  respond @blocked "Access denied!" 403
+
+  # Reverse proxy config  
+  reverse_proxy @allowed 192.168.100.X:8096
+}
+
+# Jellyseerr subdomain config
+jellyseerr.example.com {
+  import tls_porkbun
+  import headers
+  import encoding
+
+  # Logging config
+  log {
+    output file /var/log/caddy/jellyseerr-access.log
+    format json
+  }
+
+  # Allowed IP's
+  @allowed remote_ip 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8 127.0.0.1/8
+
+  # Block all rest IP's
+  @blocked not remote_ip 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8 127.0.0.1/8
+  respond @blocked "Access denied!" 403
+
+  # Reverse proxy config
+  reverse_proxy @allowed 192.168.100.X:5055
+}

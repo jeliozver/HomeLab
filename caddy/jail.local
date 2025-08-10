@@ -1,0 +1,18 @@
+[sshd]
+
+# To use more aggressive sshd modes set filter parameter "mode" in jail.local:
+# normal (default), ddos, extra or aggressive (combines all).
+# See "tests/files/logs/sshd" or "filter.d/sshd.conf" for usage example and details.
+#mode   = normal
+enabled = true
+port    = ssh
+logpath = %(sshd_log)s
+backend = %(sshd_backend)s
+
+[caddy]
+
+enabled = true
+port = http,https
+filter = caddy
+logpath = /var/log/caddy/*.log
+maxretry = 5

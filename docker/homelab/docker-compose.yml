@@ -1,0 +1,196 @@
+# Docker compose config for homelab stack. Configured to support hardlinks for radarr, sonarr, cross-seed
+services:
+  # ------------------------
+  # Torrent clients
+  # ------------------------
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:5.1.2
+    container_name: qbittorrent
+    environment:
+      - PUID={$PUID}
+      - PGID={$PGID}
+      - TZ={$TZ}
+      - WEBUI_PORT=5252
+      - TORRENTING_PORT=45878
+    volumes:
+      - ./apps/qbit/config:/config
+      - ./data/downloads/torrents:/data/downloads/torrents
+    ports:
+      - "5252:5252"
+      - "45878:45878"
+      - "45878:45878/udp"
+    restart: unless-stopped
+  # ------------------------
+  # Starr apss
+  # ------------------------
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID={$PUID}
+      - PGID={$PGID}
+      - TZ={$TZ}
+    volumes:
+      - ./apps/prowlarr/config:/config
+    ports:
+      - "9696:9696"
+    restart: unless-stopped
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID={$PUID}
+      - PGID={$PGID}
+      - TZ={$TZ}
+    volumes:
+      - ./apps/sonarr/config:/config
+      - ./data:/data
+    ports:
+      - "8989:8989"
+    restart: unless-stopped
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID={$PUID}
+      - PGID={$PGID}
+      - TZ={$TZ}
+    volumes:
+      - ./apps/radarr/config:/config
+      - ./data:/data
+    ports:
+      - "7878:7878"
+    restart: unless-stopped
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      - PUID={$PUID}
+      - PGID={$PGID}
+      - TZ={$TZ}
+    volumes:
+      - ./apps/bazarr/config:/config
+      - ./data/media/movies:/movies
+      - ./data/media/tvseries:/tv
+    ports:
+      - "6767:6767"
+    restart: unless-stopped
+  notifiarr:
+    image: golift/notifiarr
+    container_name: notifiarr
+    hostname: notifiarr
+    # privileged: true #for smartctl (monitor_drives) and/or MegaCli (monitor_raid
+    volumes:
+      - ./apps/notifiarr/config:/config
+      - /var/run/utmp:/var/run/utmp:ro
+      - /etc/machine-id:/etc/machine-id
+      #- /mnt/nas/data:/synonas
+    ports:
+      - "5454:5454"
+    restart: unless-stopped
+  # ------------------------
+  # Brr + cross-seed
+  # ------------------------
+  autobrr:
+    image: ghcr.io/autobrr/autobrr:latest
+    container_name: autobrr
+    user: 1000:1000
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ./apps/autobrr/config:/config
+    ports:
+      - "7474:7474"
+    restart: unless-stopped
+  cross-seed:
+    image: ghcr.io/cross-seed/cross-seed:6
+    container_name: cross-seed
+    user: 1000:1000
+    volumes:
+      - ./apps/cross-seed/config:/config
+      - ./data:/data
+    ports:
+      - "2468:2468"
+    command: daemon
+    restart: unless-stopped
+  # ------------------------
+  # Media Server
+  # ------------------------
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    container_name: audiobookshelf
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ./data/media/audiobooks:/audiobooks
+      - ./data/media/podcasts:/podcasts
+      - ./apps/audiobookshelf/config:/config
+      - ./apps/audiobookshelf/metadata:/metadata
+    ports:
+      - "13378:80"
+    restart: unless-stopped
+  jellyfin:
+    image: jellyfin/jellyfin
+    container_name: jellyfin
+    user: 1000:1000
+    network_mode: 'host'
+    volumes:
+      - ./apps/jellyfin/config:/config
+      - ./apps/jellyfin/cache:/cache
+      - type: bind
+        source: ./data/media/movies
+        target: /movies
+      - type: bind
+        source: ./data/media/tvseries
+        target: /series
+        read_only: true
+      - type: bind
+        source: ./data/media/anime
+        target: /anime
+        read_only: true
+    #environment:
+     #- JELLYFIN_PublishedServerUrl=http://example.com
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    restart: 'unless-stopped'
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    environment:
+      - LOG_LEVEL=debug
+      - TZ=${TZ}
+      - PORT=5055
+    ports:
+      - "5055:5055"
+    volumes:
+      - ./apps/jellyseerr/config:/app/config
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1
+      start_period: 20s
+      timeout: 3s
+      interval: 15s
+      retries: 3
+    restart: unless-stopped
+  # ------------------------
+  # Misc
+  # ------------------------
+  netronome:
+    image: ghcr.io/autobrr/netronome:latest
+    container_name: netronome
+    user: 1000:1000
+    volumes:
+      - ./apps/netronome/config:/data
+    ports:
+      - "7575:7575"
+    restart: unless-stopped
+  netronome-agent:
+    image: ghcr.io/autobrr/netronome:latest
+    container_name: netronome-agent
+    user: 1000:1000
+    command: [ "agent" ]
+    # docker compose exec netronome-agent apk add vnstat
+    volumes:
+      - ./apps/netronome-agent/config:/data
+    ports:
+      - "8200:8200"
+    restart: unless-stopped
