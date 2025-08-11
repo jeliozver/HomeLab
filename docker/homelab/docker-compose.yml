@@ -7,14 +7,14 @@ services:
     image: lscr.io/linuxserver/qbittorrent:5.1.2
     container_name: qbittorrent
     environment:
-      - PUID={$PUID}
-      - PGID={$PGID}
-      - TZ={$TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
       - WEBUI_PORT=5252
       - TORRENTING_PORT=45878
     volumes:
-      - ./apps/qbit/config:/config
-      - ./data/downloads/torrents:/data/downloads/torrents
+      - "${APPS_BASE_PATH}/qbit/config:/config"
+      - "${DATA_BASE_PATH}/downloads/torrents:/data/downloads/torrents"
     ports:
       - "5252:5252"
       - "45878:45878"
@@ -27,11 +27,11 @@ services:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
     environment:
-      - PUID={$PUID}
-      - PGID={$PGID}
-      - TZ={$TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     volumes:
-      - ./apps/prowlarr/config:/config
+      - "${APPS_BASE_PATH}/prowlarr/config:/config"
     ports:
       - "9696:9696"
     restart: unless-stopped
@@ -39,12 +39,12 @@ services:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
     environment:
-      - PUID={$PUID}
-      - PGID={$PGID}
-      - TZ={$TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     volumes:
-      - ./apps/sonarr/config:/config
-      - ./data:/data
+      - "${APPS_BASE_PATH}/sonarr/config:/config"
+      - "${DATA_BASE_PATH}:/data"
     ports:
       - "8989:8989"
     restart: unless-stopped
@@ -52,12 +52,12 @@ services:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
     environment:
-      - PUID={$PUID}
-      - PGID={$PGID}
-      - TZ={$TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     volumes:
-      - ./apps/radarr/config:/config
-      - ./data:/data
+      - "${APPS_BASE_PATH}/radarr/config:/config"
+      - "${DATA_BASE_PATH}:/data"
     ports:
       - "7878:7878"
     restart: unless-stopped
@@ -65,13 +65,12 @@ services:
     image: lscr.io/linuxserver/bazarr:latest
     container_name: bazarr
     environment:
-      - PUID={$PUID}
-      - PGID={$PGID}
-      - TZ={$TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     volumes:
-      - ./apps/bazarr/config:/config
-      - ./data/media/movies:/movies
-      - ./data/media/tvseries:/tv
+      - "${APPS_BASE_PATH}/bazarr/config:/config"
+      - "${DATA_BASE_PATH}:/data"
     ports:
       - "6767:6767"
     restart: unless-stopped
@@ -81,10 +80,10 @@ services:
     hostname: notifiarr
     # privileged: true #for smartctl (monitor_drives) and/or MegaCli (monitor_raid
     volumes:
-      - ./apps/notifiarr/config:/config
+      - "${APPS_BASE_PATH}/notifiarr/config:/config"
       - /var/run/utmp:/var/run/utmp:ro
       - /etc/machine-id:/etc/machine-id
-      #- /mnt/nas/data:/synonas
+      #- /mnt/nas/data:/synonas #drives to monitor
     ports:
       - "5454:5454"
     restart: unless-stopped
@@ -94,21 +93,21 @@ services:
   autobrr:
     image: ghcr.io/autobrr/autobrr:latest
     container_name: autobrr
-    user: 1000:1000
+    user: "${PUID}:${PGID}"
     environment:
       - TZ=${TZ}
     volumes:
-      - ./apps/autobrr/config:/config
+      - "${APPS_BASE_PATH}/autobrr/config:/config"
     ports:
       - "7474:7474"
     restart: unless-stopped
   cross-seed:
     image: ghcr.io/cross-seed/cross-seed:6
     container_name: cross-seed
-    user: 1000:1000
+    user: "${PUID}:${PGID}"
     volumes:
-      - ./apps/cross-seed/config:/config
-      - ./data:/data
+      - "${APPS_BASE_PATH}/cross-seed/config:/config"
+      - "${DATA_BASE_PATH}:/data"
     ports:
       - "2468:2468"
     command: daemon
@@ -122,32 +121,26 @@ services:
     environment:
       - TZ=${TZ}
     volumes:
-      - ./data/media/audiobooks:/audiobooks
-      - ./data/media/podcasts:/podcasts
-      - ./apps/audiobookshelf/config:/config
-      - ./apps/audiobookshelf/metadata:/metadata
+      - "${APPS_BASE_PATH}/audiobookshelf/config:/config"
+      - "${APPS_BASE_PATH}/audiobookshelf/metadata:/metadata"
+      - "${DATA_BASE_PATH}/media/audiobooks:/audiobooks"
+      - "${DATA_BASE_PATH}/media/podcasts:/podcasts"
     ports:
       - "13378:80"
     restart: unless-stopped
   jellyfin:
     image: jellyfin/jellyfin
     container_name: jellyfin
-    user: 1000:1000
+    user: "${PUID}:${PGID}"
     network_mode: 'host'
+    # For Hardware Acceleration
+    # https://jellyfin.org/docs/general/post-install/transcoding/hardware-acceleration
     volumes:
-      - ./apps/jellyfin/config:/config
-      - ./apps/jellyfin/cache:/cache
-      - type: bind
-        source: ./data/media/movies
-        target: /movies
-      - type: bind
-        source: ./data/media/tvseries
-        target: /series
-        read_only: true
-      - type: bind
-        source: ./data/media/anime
-        target: /anime
-        read_only: true
+      - "${APPS_BASE_PATH}/jellyfin/config:/config"
+      - "${APPS_BASE_PATH}/jellyfin/cache:/cache"
+      - "${DATA_BASE_PATH}/media/movies:/movies"
+      - "${DATA_BASE_PATH}/media/tvseries:/series"
+      - "${DATA_BASE_PATH}/media/anime:/anime"
     #environment:
      #- JELLYFIN_PublishedServerUrl=http://example.com
     extra_hosts:
@@ -163,7 +156,7 @@ services:
     ports:
       - "5055:5055"
     volumes:
-      - ./apps/jellyseerr/config:/app/config
+      - "${APPS_BASE_PATH}/jellyseerr/config:/app/config"
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1
       start_period: 20s
@@ -177,20 +170,20 @@ services:
   netronome:
     image: ghcr.io/autobrr/netronome:latest
     container_name: netronome
-    user: 1000:1000
+    user: "${PUID}:${PGID}"
     volumes:
-      - ./apps/netronome/config:/data
+      - "${APPS_BASE_PATH}/netronome/config:/data"
     ports:
       - "7575:7575"
     restart: unless-stopped
   netronome-agent:
     image: ghcr.io/autobrr/netronome:latest
     container_name: netronome-agent
-    user: 1000:1000
+    user: "${PUID}:${PGID}"
     command: [ "agent" ]
     # docker compose exec netronome-agent apk add vnstat
     volumes:
-      - ./apps/netronome-agent/config:/data
+      - "${APPS_BASE_PATH}/netronome-agent/config:/data"
     ports:
       - "8200:8200"
     restart: unless-stopped
