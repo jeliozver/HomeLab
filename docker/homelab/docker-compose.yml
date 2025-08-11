@@ -14,7 +14,7 @@ services:
       - TORRENTING_PORT=45878
     volumes:
       - "${APPS_BASE_PATH}/qbit/config:/config"
-      - "${DATA_BASE_PATH}/downloads/torrents:/data/downloads/torrents"
+      - "${DATA_BASE_PATH}:/data"
     ports:
       - "5252:5252"
       - "45878:45878"
