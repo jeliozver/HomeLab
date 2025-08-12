@@ -13,12 +13,29 @@ services:
       - WEBUI_PORT=5252
       - TORRENTING_PORT=45878
     volumes:
-      - "${APPS_BASE_PATH}/qbit/config:/config"
-      - "${DATA_BASE_PATH}:/data"
+      - ${APPS_BASE_PATH}/qbit/config:/config
+      - ${DATA_BASE_PATH}:/data
     ports:
       - "5252:5252"
       - "45878:45878"
       - "45878:45878/udp"
+    restart: unless-stopped
+  deluge:
+    image: lscr.io/linuxserver/deluge:2.2.0
+    container_name: deluge
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      #- DELUGE_LOGLEVEL=error #optional
+    volumes:
+      - ${APPS_BASE_PATH}/deluge/config:/config
+      - ${DATA_BASE_PATH}:/data
+    ports:
+      - "5353:8112" #web ui port
+      - "45969:6881" #torrent port
+      - "45969:6881/udp" #torrent port
+      - "58846:58846" #Default deluged port for thin client connectivity
     restart: unless-stopped
   # ------------------------
   # Starr apss
@@ -31,7 +48,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - "${APPS_BASE_PATH}/prowlarr/config:/config"
+      - ${APPS_BASE_PATH}/prowlarr/config:/config
     ports:
       - "9696:9696"
     restart: unless-stopped
@@ -43,8 +60,8 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - "${APPS_BASE_PATH}/sonarr/config:/config"
-      - "${DATA_BASE_PATH}:/data"
+      - ${APPS_BASE_PATH}/sonarr/config:/config
+      - ${DATA_BASE_PATH}:/data
     ports:
       - "8989:8989"
     restart: unless-stopped
@@ -56,8 +73,8 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - "${APPS_BASE_PATH}/radarr/config:/config"
-      - "${DATA_BASE_PATH}:/data"
+      - ${APPS_BASE_PATH}/radarr/config:/config
+      - ${DATA_BASE_PATH}:/data
     ports:
       - "7878:7878"
     restart: unless-stopped
@@ -69,8 +86,8 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - "${APPS_BASE_PATH}/bazarr/config:/config"
-      - "${DATA_BASE_PATH}:/data"
+      - ${APPS_BASE_PATH}/bazarr/config:/config
+      - ${DATA_BASE_PATH}:/data
     ports:
       - "6767:6767"
     restart: unless-stopped
@@ -80,7 +97,7 @@ services:
     hostname: notifiarr
     # privileged: true #for smartctl (monitor_drives) and/or MegaCli (monitor_raid
     volumes:
-      - "${APPS_BASE_PATH}/notifiarr/config:/config"
+      - ${APPS_BASE_PATH}/notifiarr/config:/config
       - /var/run/utmp:/var/run/utmp:ro
       - /etc/machine-id:/etc/machine-id
       #- /mnt/nas/data:/synonas #drives to monitor
@@ -97,7 +114,7 @@ services:
     environment:
       - TZ=${TZ}
     volumes:
-      - "${APPS_BASE_PATH}/autobrr/config:/config"
+      - ${APPS_BASE_PATH}/autobrr/config:/config
     ports:
       - "7474:7474"
     restart: unless-stopped
@@ -106,8 +123,8 @@ services:
     container_name: cross-seed
     user: "${PUID}:${PGID}"
     volumes:
-      - "${APPS_BASE_PATH}/cross-seed/config:/config"
-      - "${DATA_BASE_PATH}:/data"
+      - ${APPS_BASE_PATH}/cross-seed/config:/config
+      - ${DATA_BASE_PATH}:/data
     ports:
       - "2468:2468"
     command: daemon
@@ -121,10 +138,10 @@ services:
     environment:
       - TZ=${TZ}
     volumes:
-      - "${APPS_BASE_PATH}/audiobookshelf/config:/config"
-      - "${APPS_BASE_PATH}/audiobookshelf/metadata:/metadata"
-      - "${DATA_BASE_PATH}/media/audiobooks:/audiobooks"
-      - "${DATA_BASE_PATH}/media/podcasts:/podcasts"
+      - ${APPS_BASE_PATH}/audiobookshelf/config:/config
+      - ${APPS_BASE_PATH}/audiobookshelf/metadata:/metadata
+      - ${DATA_BASE_PATH}/media/audiobooks:/audiobooks
+      - ${DATA_BASE_PATH}/media/podcasts:/podcasts
     ports:
       - "13378:80"
     restart: unless-stopped
@@ -136,11 +153,11 @@ services:
     # For Hardware Acceleration
     # https://jellyfin.org/docs/general/post-install/transcoding/hardware-acceleration
     volumes:
-      - "${APPS_BASE_PATH}/jellyfin/config:/config"
-      - "${APPS_BASE_PATH}/jellyfin/cache:/cache"
-      - "${DATA_BASE_PATH}/media/movies:/movies"
-      - "${DATA_BASE_PATH}/media/tvseries:/series"
-      - "${DATA_BASE_PATH}/media/anime:/anime"
+      - ${APPS_BASE_PATH}/jellyfin/config:/config
+      - ${APPS_BASE_PATH}/jellyfin/cache:/cache
+      - ${DATA_BASE_PATH}/media/movies:/movies
+      - ${DATA_BASE_PATH}/media/tvseries:/series
+      - ${DATA_BASE_PATH}/media/anime:/anime
     #environment:
      #- JELLYFIN_PublishedServerUrl=http://example.com
     extra_hosts:
@@ -156,7 +173,7 @@ services:
     ports:
       - "5055:5055"
     volumes:
-      - "${APPS_BASE_PATH}/jellyseerr/config:/app/config"
+      - ${APPS_BASE_PATH}/jellyseerr/config:/app/config
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1
       start_period: 20s
@@ -172,7 +189,7 @@ services:
     container_name: netronome
     user: "${PUID}:${PGID}"
     volumes:
-      - "${APPS_BASE_PATH}/netronome/config:/data"
+      - ${APPS_BASE_PATH}/netronome/config:/data
     ports:
       - "7575:7575"
     restart: unless-stopped
@@ -183,7 +200,7 @@ services:
     command: [ "agent" ]
     # docker compose exec netronome-agent apk add vnstat
     volumes:
-      - "${APPS_BASE_PATH}/netronome-agent/config:/data"
+      - ${APPS_BASE_PATH}/netronome-agent/config:/data
     ports:
       - "8200:8200"
     restart: unless-stopped

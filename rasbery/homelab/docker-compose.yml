@@ -8,10 +8,10 @@ services:
     environment:
       - TZ=${TZ}
     volumes:
-      - "${APPS_BASE_PATH}/audiobookshelf/config:/config"
-      - "${APPS_BASE_PATH}/audiobookshelf/metadata:/metadata"
-      - "${DATA_BASE_PATH}/media/audiobooks:/audiobooks"
-      - "${DATA_BASE_PATH}/media/podcasts:/podcasts"
+      - ${APPS_BASE_PATH}/audiobookshelf/config:/config
+      - ${APPS_BASE_PATH}/audiobookshelf/metadata:/metadata
+      - ${DATA_BASE_PATH}/media/audiobooks:/audiobooks
+      - ${DATA_BASE_PATH}/media/podcasts:/podcasts
     ports:
       - "13378:80"
     restart: unless-stopped
@@ -23,7 +23,7 @@ services:
     container_name: netronome
     user: "${PUID}:${PGID}"
     volumes:
-      - "${APPS_BASE_PATH}/netronome/config:/data"
+      - ${APPS_BASE_PATH}/netronome/config:/data
     ports:
       - "7575:7575"
     restart: unless-stopped
@@ -34,7 +34,7 @@ services:
     command: [ "agent" ]
     # docker compose exec netronome-agent apk add vnstat
     volumes:
-      - "${APPS_BASE_PATH}/netronome-agent/config:/data"
+      - ${APPS_BASE_PATH}/netronome-agent/config:/data
     ports:
       - "8200:8200"
     restart: unless-stopped
