@@ -12,6 +12,7 @@ services:
       - TZ=${TZ}
       - WEBUI_PORT=5252
       - TORRENTING_PORT=45878
+      - DOCKER_MODS=ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest
     volumes:
       - ${APPS_BASE_PATH}/qbit/config:/config
       - ${DATA_BASE_PATH}:/data
