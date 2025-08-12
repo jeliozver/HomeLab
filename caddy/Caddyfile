@@ -1,6 +1,7 @@
+
 # Global config
 {
-  # Global logging   
+  # Global logging
   log {
     output file /var/log/caddy/access.log
     format json
@@ -14,6 +15,19 @@
       api_key {$PORKBUN_API_KEY}
       api_secret_key {$PORKBUN_API_SECRET}
     }
+  }
+}
+
+# TLS Inernal
+(tls_internal) {
+ tls internal
+}
+
+# TLS Config
+(tls) {
+  tls {
+    protocols tls1.2 tls1.3
+    ciphers TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256 TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
   }
 }
 
@@ -33,26 +47,37 @@
   encode zstd gzip
 }
 
+# Allowed IP's - Local + External
+(allowed_ip) {
+  @allowed remote_ip 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8 127.0.0.1/8
+
+  # Block all rest IP's
+  @blocked not remote_ip 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8 127.0.0.1/8
+  respond @blocked "Access denied!" 403
+}
+
+# Allowed IP's - Local Only (Can only reach locally or with VPN Client connected to a local VPN server)
+(allowed_ip_local) {
+  @allowed remote_ip 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8 127.0.0.1/8
+
+  # Block all rest IP's
+  @blocked not remote_ip 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8 127.0.0.1/8
+  respond @blocked "Access denied!" 403
+}
+
 # Jellyfin subdomain config
 jellyfin.example.com {
   import tls_porkbun
   import headers
   import encoding
-  
+
   # Logging config
   log {
     output file /var/log/caddy/jellyfin-access.log
     format json
   }
-  
-  # Allowed IP's
-  @allowed remote_ip 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8 127.0.0.1/8
-  
-  # Block all rest IP's
-  @blocked not remote_ip 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8 127.0.0.1/8
-  respond @blocked "Access denied!" 403
 
-  # Reverse proxy config  
+  import allowed_ip
   reverse_proxy @allowed 192.168.100.X:8096
 }
 
@@ -68,13 +93,6 @@ jellyseerr.example.com {
     format json
   }
 
-  # Allowed IP's
-  @allowed remote_ip 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8 127.0.0.1/8
-
-  # Block all rest IP's
-  @blocked not remote_ip 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8 127.0.0.1/8
-  respond @blocked "Access denied!" 403
-
-  # Reverse proxy config
+  import allowed_ip
   reverse_proxy @allowed 192.168.100.X:5055
 }
