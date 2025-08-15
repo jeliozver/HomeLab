@@ -194,14 +194,3 @@ services:
     ports:
       - "7575:7575"
     restart: unless-stopped
-  netronome-agent:
-    image: ghcr.io/autobrr/netronome:latest
-    container_name: netronome-agent
-    user: "${PUID}:${PGID}"
-    command: [ "agent" ]
-    # docker compose exec netronome-agent apk add vnstat
-    volumes:
-      - ${APPS_BASE_PATH}/netronome-agent/config:/data
-    ports:
-      - "8200:8200"
-    restart: unless-stopped
