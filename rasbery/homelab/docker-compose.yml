@@ -45,3 +45,21 @@ services:
     ports:
       - "7575:7575"
     restart: unless-stopped
+  goaccess:
+    image: "xavierh/goaccess-for-nginxproxymanager:latest"
+    container_name: goaccess
+    restart: unless-stopped
+    ports:
+      - "7880:7880"
+    environment:
+      - PUID=995
+      - PGID=991
+      - TZ=${TZ}
+      - SKIP_ARCHIVED_LOGS=False
+      - DEBUG=False
+      - LOG_TYPE=CADDY_V1
+      - HTML_REFRESH=5
+      - KEEP_LAST=30
+      - PROCESSING_THREADS=1
+    volumes:
+      - /var/log/caddy:/opt/log
