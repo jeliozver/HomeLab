@@ -36,6 +36,14 @@ services:
   # ------------------------
   # Misc
   # ------------------------
+  qui:
+    image: ghcr.io/autobrr/qui:latest
+    container_name: qui
+    ports:
+      - "7476:7476"
+    volumes:
+      - ${APPS_BASE_PATH}/qui/config:/config
+    restart: unless-stopped
   netronome:
     image: ghcr.io/autobrr/netronome:latest
     container_name: netronome
