@@ -1,11 +1,17 @@
-
-# Global config
+# Global logging
 {
-  # Global logging
   log {
     output file /var/log/caddy/access.log
     format json
   }
+}
+
+# Logging template
+(log) {
+  log {
+    output file /var/log/caddy/access.log
+     format json
+   }
 }
 
 # TLS Config Porkbun
@@ -20,7 +26,7 @@
 
 # TLS Inernal
 (tls_internal) {
- tls internal
+  tls internal
 }
 
 # TLS Config
@@ -36,7 +42,6 @@
   header {
     -Server
     Strict-Transport-Security "max-age=63072000"
-
     # Opt-out search engines
     X-Robots-Tag "noindex, nofollow, nosnippet, noarchive"
   }
@@ -44,55 +49,65 @@
 
 # Common encoding
 (encoding) {
-  encode zstd gzip
+    encode zstd gzip
 }
 
-# Allowed IP's - Local + External
+# Allowed IP's
 (allowed_ip) {
   @allowed remote_ip 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8 127.0.0.1/8
-
-  # Block all rest IP's
   @blocked not remote_ip 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8 127.0.0.1/8
+
   respond @blocked "Access denied!" 403
 }
 
-# Allowed IP's - Local Only (Can only reach locally or with VPN Client connected to a local VPN server)
-(allowed_ip_local) {
+# Allowed IP's Local only
+(allowed_ip_local_only) {
   @allowed remote_ip 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8 127.0.0.1/8
-
-  # Block all rest IP's
   @blocked not remote_ip 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8 127.0.0.1/8
+
   respond @blocked "Access denied!" 403
 }
 
 # Jellyfin subdomain config
-jellyfin.example.com {
+jellyfin.jeliozver.com {
   import tls_porkbun
   import headers
   import encoding
-
-  # Logging config
-  log {
-    output file /var/log/caddy/jellyfin-access.log
-    format json
-  }
-
+  import log
   import allowed_ip
+
   reverse_proxy @allowed 192.168.100.X:8096
 }
 
 # Jellyseerr subdomain config
-jellyseerr.example.com {
+jellyseerr.jeliozver.com {
   import tls_porkbun
   import headers
   import encoding
-
-  # Logging config
-  log {
-    output file /var/log/caddy/jellyseerr-access.log
-    format json
-  }
-
+  import log
   import allowed_ip
+
   reverse_proxy @allowed 192.168.100.X:5055
+}
+
+# Audiobookshelf config
+abs.jeliozver.com {
+  import tls_porkbun
+  import headers
+  import encoding
+  import log
+  import allowed_ip
+
+  reverse_proxy @allowed 192.168.100.X:13378
+}
+
+# Authentic config
+auth.jeliozver.com {
+  import tls_porkbun
+  import headers
+  import encoding
+  import log
+  import allowed_ip
+
+  reverse_proxy @allowed 192.168.100.X:9000
 }
