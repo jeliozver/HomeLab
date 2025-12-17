@@ -44,15 +44,6 @@ services:
     volumes:
       - ${APPS_BASE_PATH}/qui/config:/config
     restart: unless-stopped
-  netronome:
-    image: ghcr.io/autobrr/netronome:latest
-    container_name: netronome
-    user: "${PUID}:${PGID}"
-    volumes:
-      - ${APPS_BASE_PATH}/netronome/config:/data
-    ports:
-      - "7575:7575"
-    restart: unless-stopped
   goaccess:
     image: "xavierh/goaccess-for-nginxproxymanager:latest"
     container_name: goaccess
@@ -71,3 +62,15 @@ services:
       - PROCESSING_THREADS=1
     volumes:
       - /var/log/caddy:/opt/log
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ${APPS_BASE_PATH}/homepage:/app/config
+    environment:
+      - HOMEPAGE_ALLOWED_HOSTS=192.168.100.13:3000,192.168.100.12:3000,192.168.100.3:3000
+      - PUID=${PUID}
+      - PGID=${PGID}
