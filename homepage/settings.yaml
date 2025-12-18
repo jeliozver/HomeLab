@@ -5,14 +5,29 @@
 title: Jeliozver Homepage
 theme: dark
 color: slate
+useEqualHeights: true
 
 background:
   image: https://images.unsplash.com/photo-1502790671504-542ad42d5189?auto=format&fit=crop&w=2560&q=80
-  blur: sm # sm, "", md, xl... see https://tailwindcss.com/docs/backdrop-blur
-  saturate: 50 # 0, 50, 100... see https://tailwindcss.com/docs/backdrop-saturate
-  brightness: 50 # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
-  opacity: 50 # 0-100
+  blur: sm
+  saturate: 50
+  brightness: 50
+  opacity: 50
 
-providers:
-  openweathermap: openweathermapapikey
-  weatherapi: weatherapiapikey
+layout:
+  Starr Apps:
+    header: true
+    style: row
+    columns: 4
+  Media Apps:
+    header: true
+    style: row
+    columns: 3
+  Torrenting:
+    header: true
+    style: row
+    columns: 3
+  Misc:
+    header: true
+    style: row
+    columns: 4

@@ -2,3 +2,135 @@
 # For configuration options and examples, please see:
 # https://gethomepage.dev/configs/services/
 
+- Starr Apps:
+    - Sonarr:
+        icon: sonarr.png
+        href: "{{HOMEPAGE_VAR_SONARR_URL}}"
+        description: TV Series Manager
+        widget:
+          type: sonarr
+          url: "{{HOMEPAGE_VAR_SONARR_URL}}"
+          key: "{{HOMEPAGE_VAR_SONARR_API_KEY}}"
+          enableQueue: true
+    - Radarr:
+        icon: radarr.png
+        href: "{{HOMEPAGE_VAR_RADARR_URL}}"
+        description: Movies Manager
+        widget:
+          type: radarr
+          url: "{{HOMEPAGE_VAR_RADARR_URL}}"
+          key: "{{HOMEPAGE_VAR_RADARR_API_KEY}}"
+          enableQueue: true
+    - Bazarr:
+        icon: bazarr.png
+        href: "{{HOMEPAGE_VAR_BAZARR_URL}}"
+        description: Subtitles Manager
+        widget:
+          type: bazarr
+          url: "{{HOMEPAGE_VAR_BAZARR_URL}}"
+          key: "{{HOMEPAGE_VAR_BAZARR_API_KEY}}"
+    - Prowlarr:
+        icon: prowlarr.png
+        href: "{{HOMEPAGE_VAR_PROWLARR_URL}}"
+        description: Indexers Manager
+        widget:
+          type: prowlarr
+          url: "{{HOMEPAGE_VAR_PROWLARR_URL}}"
+          key: "{{HOMEPAGE_VAR_PROWLARR_API_KEY}}"
+- Media Apps:
+    - Jellyfin:
+        icon: jellyfin.png
+        href: "{{HOMEPAGE_VAR_JELLYFIN_URL}}"
+        description: Media Server
+        widget:
+          type: jellyfin
+          url: "{{HOMEPAGE_VAR_JELLYFIN_URL}}"
+          key: "{{HOMEPAGE_VAR_JELLYFIN_API_KEY}}"
+          enableBlocks: true
+          enableNowPlaying: true
+          enableUser: true
+          enableMediaControl: false
+          showEpisodeNumber: true
+          expandOneStreamToTwoRows: false
+    - Jellyseerr:
+        icon: jellyseerr.png
+        href: "{{HOMEPAGE_VAR_JELLYSEERR_URL}}"
+        description: Media Request Server
+        widget:
+          type: jellyseerr
+          url: "{{HOMEPAGE_VAR_JELLYSEERR_URL}}"
+          key: "{{HOMEPAGE_VAR_JELLYSEERR_API_KEY}}"
+    - Audiobookshelf:
+        icon: audiobookshelf.png
+        href: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_URL}}"
+        description: Media Request Server
+        widget:
+          type: audiobookshelf
+          url: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_URL}}"
+          key: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_API_KEY}}"
+- Torrenting:
+    - Qbit:
+        icon: qbittorrent.png
+        href: "{{HOMEPAGE_VAR_QUI_URL}}"
+        description: Qbit Torrent Client
+        widget:
+          type: qbittorrent
+          url: "{{HOMEPAGE_VAR_QBIT_URL}}"
+          username: username
+          password: password
+          enableLeechProgress: true
+          enableLeechSize: true
+    - Transmission:
+        icon: transmission.png
+        href: "{{HOMEPAGE_VAR_TRANSMISSION_WEB_URL}}"
+        description: Transmission Torrent Client
+        widget:
+          type: transmission
+          url: "{{HOMEPAGE_VAR_TRANSMISSION_URL}}"
+          username: "{{HOMEPAGE_VAR_TRANSMISSION_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_TRANSMISSION_PASS}}"
+          rpcUrl: /transmission/
+    - Autobrr:
+        icon: autobrr.png
+        href: "{{HOMEPAGE_VAR_AUTOBRR_URL}}"
+        description: Auto Download Tool
+        widget:
+          type: autobrr
+          url: "{{HOMEPAGE_VAR_AUTOBRR_URL}}"
+          key: "{{HOMEPAGE_VAR_AUTOBRR_API_KEY}}"
+- Misc:
+    - PiHole:
+        icon: pihole.png
+        href: "{{HOMEPAGE_VAR_PIHOLE_URL}}"
+        description: Network-wide Ad Blocker
+        widget:
+          type: pihole
+          url: "{{HOMEPAGE_VAR_PIHOLE_URL}}"
+          version: 6
+          key: "{{HOMEPAGE_VAR_PIHOLE_API_KEY}}"
+    - Portainer:
+        icon: portainer.png
+        href: "{{HOMEPAGE_VAR_PORTAINER_URL}}"
+        description: Docker Containers Manager
+        widget:
+          type: portainer
+          url: "{{HOMEPAGE_VAR_PORTAINER_URL}}"
+          env: 6
+          kubernetes: false
+          key: "{{HOMEPAGE_VAR_PORTAINER_API_KEY}}"
+    - Authentik:
+        icon: authentik.png
+        href: "{{HOMEPAGE_VAR_AUTHENTIK_URL}}"
+        description: Docker Containers Manager
+        widget:
+          type: authentik
+          url: "{{HOMEPAGE_VAR_AUTHENTIK_URL}}"
+          key: "{{HOMEPAGE_VAR_AUTHENTIK_API_KEY}}"
+          version: 2
+    - Caddy:
+        icon: caddy.png
+        href: "{{HOMEPAGE_VAR_CADDY_URL}}"
+        description: Reverse Proxy
+        widget:
+          type: caddy
+          url: "{{HOMEPAGE_VAR_CADDY_URL}}"
