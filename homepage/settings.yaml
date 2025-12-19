@@ -28,15 +28,15 @@ layout:
     header: true
     style: row
     columns: 3
-  Notifications:
-    header: true
-    style: row
-    columns: 2
   Networking:
     header: true
     style: row
     columns: 3
   Misc:
+    header: true
+    style: row
+    columns: 2
+  Notifications:
     header: true
     style: row
     columns: 2

@@ -98,15 +98,6 @@
           type: autobrr
           url: "{{HOMEPAGE_VAR_AUTOBRR_URL}}"
           key: "{{HOMEPAGE_VAR_AUTOBRR_API_KEY}}"
-- Notifications:
-    - Notifiarr Web:
-        icon: notifiarr.png
-        href: "{{HOMEPAGE_VAR_NOTIFIARR_WEB_URL}}"
-        description: Notifications Manager
-    - Notifiarr Client:
-        icon: notifiarr.png
-        href: "{{HOMEPAGE_VAR_NOTIFIARR_CLIENT_URL}}"
-        description: Notifiarr Client
 - Networking:
     - PiHole:
         icon: pi-hole.png
@@ -148,3 +139,12 @@
           url: "{{HOMEPAGE_VAR_AUTHENTIK_URL}}"
           key: "{{HOMEPAGE_VAR_AUTHENTIK_API_KEY}}"
           version: 2
+- Notifications:
+    - Notifiarr Web:
+        icon: notifiarr.png
+        href: "{{HOMEPAGE_VAR_NOTIFIARR_WEB_URL}}"
+        description: Notifications Manager
+    - Notifiarr Client:
+        icon: notifiarr.png
+        href: "{{HOMEPAGE_VAR_NOTIFIARR_CLIENT_URL}}"
+        description: Notifiarr Client

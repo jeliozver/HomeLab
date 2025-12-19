@@ -9,3 +9,16 @@
     cputemp: true
     uptime: false
     network: false
+
+- search:
+    provider: duckduckgo
+    focus: true
+    showSearchSuggestions: true
+    target: _blank
+
+- datetime:
+    text_size: xl
+    format:
+     dateStyle: short
+     timeStyle: short
+     hourCycle: h23
