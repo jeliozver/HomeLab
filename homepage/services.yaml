@@ -63,7 +63,7 @@
     - Audiobookshelf:
         icon: audiobookshelf.png
         href: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_URL}}"
-        description: Media Request Server
+        description: Audiobooks Server
         widget:
           type: audiobookshelf
           url: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_URL}}"
@@ -98,18 +98,39 @@
           type: autobrr
           url: "{{HOMEPAGE_VAR_AUTOBRR_URL}}"
           key: "{{HOMEPAGE_VAR_AUTOBRR_API_KEY}}"
-- Misc:
+- Notifications:
+    - Notifiarr Web:
+        icon: notifiarr.png
+        href: "{{HOMEPAGE_VAR_NOTIFIARR_WEB_URL}}"
+        description: Notifications Manager
+    - Notifiarr Client:
+        icon: notifiarr.png
+        href: "{{HOMEPAGE_VAR_NOTIFIARR_CLIENT_URL}}"
+        description: Notifiarr Client
+- Networking:
     - PiHole:
-        icon: pihole.png
-        href: "{{HOMEPAGE_VAR_PIHOLE_URL}}"
+        icon: pi-hole.png
+        href: "{{HOMEPAGE_VAR_PIHOLE_WEB_URL}}"
         description: Network-wide Ad Blocker
         widget:
           type: pihole
           url: "{{HOMEPAGE_VAR_PIHOLE_URL}}"
           version: 6
           key: "{{HOMEPAGE_VAR_PIHOLE_API_KEY}}"
+    - Caddy:
+        icon: caddy.png
+        href: "https://caddyserver.com"
+        description: Reverse Proxy
+        widget:
+          type: caddy
+          url: "{{HOMEPAGE_VAR_CADDY_URL}}"
+    - GoAccess:
+        icon: goaccess.png
+        href: "{{HOMEPAGE_VAR_GOACCESS_URL}}"
+        description: Web log analyzer
+- Misc:
     - Portainer:
-        icon: portainer.png
+        icon: portainer-alt.png
         href: "{{HOMEPAGE_VAR_PORTAINER_URL}}"
         description: Docker Containers Manager
         widget:
@@ -121,16 +142,9 @@
     - Authentik:
         icon: authentik.png
         href: "{{HOMEPAGE_VAR_AUTHENTIK_URL}}"
-        description: Docker Containers Manager
+        description: Identity Provider (IdP) for modern SSO
         widget:
           type: authentik
           url: "{{HOMEPAGE_VAR_AUTHENTIK_URL}}"
           key: "{{HOMEPAGE_VAR_AUTHENTIK_API_KEY}}"
           version: 2
-    - Caddy:
-        icon: caddy.png
-        href: "{{HOMEPAGE_VAR_CADDY_URL}}"
-        description: Reverse Proxy
-        widget:
-          type: caddy
-          url: "{{HOMEPAGE_VAR_CADDY_URL}}"

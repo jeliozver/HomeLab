@@ -68,6 +68,7 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"
+    env_file: .env
     volumes:
       - ${APPS_BASE_PATH}/homepage:/app/config
     environment:

@@ -7,5 +7,5 @@
     memory: true
     disk: /
     cputemp: true
-    uptime: true
-    network: true
+    uptime: false
+    network: false
