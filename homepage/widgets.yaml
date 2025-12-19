@@ -9,6 +9,7 @@
     cputemp: true
     uptime: false
     network: false
+    refresh: 30000
 
 - search:
     provider: duckduckgo
@@ -16,9 +17,12 @@
     showSearchSuggestions: true
     target: _blank
 
-- datetime:
-    text_size: xl
+- openmeteo:
+    label: Varna
+    latitude: 43.2167
+    longitude: 27.9167
+    timezone: Europe/Sofia
+    units: metric
+    cache: 5
     format:
-     dateStyle: short
-     timeStyle: short
-     hourCycle: h23
+      maximumFractionDigits: 0

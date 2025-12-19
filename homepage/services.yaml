@@ -6,6 +6,7 @@
     - Sonarr:
         icon: sonarr.png
         href: "{{HOMEPAGE_VAR_SONARR_URL}}"
+        siteMonitor: "{{HOMEPAGE_VAR_SONARR_URL}}"
         description: TV Series Manager
         widget:
           type: sonarr
@@ -15,6 +16,7 @@
     - Radarr:
         icon: radarr.png
         href: "{{HOMEPAGE_VAR_RADARR_URL}}"
+        siteMonitor: "{{HOMEPAGE_VAR_RADARR_URL}}"
         description: Movies Manager
         widget:
           type: radarr
@@ -24,6 +26,7 @@
     - Bazarr:
         icon: bazarr.png
         href: "{{HOMEPAGE_VAR_BAZARR_URL}}"
+        siteMonitor: "{{HOMEPAGE_VAR_BAZARR_URL}}"
         description: Subtitles Manager
         widget:
           type: bazarr
@@ -32,6 +35,7 @@
     - Prowlarr:
         icon: prowlarr.png
         href: "{{HOMEPAGE_VAR_PROWLARR_URL}}"
+        siteMonitor: "{{HOMEPAGE_VAR_PROWLARR_URL}}"
         description: Indexers Manager
         widget:
           type: prowlarr
@@ -41,6 +45,7 @@
     - Jellyfin:
         icon: jellyfin.png
         href: "{{HOMEPAGE_VAR_JELLYFIN_URL}}"
+        siteMonitor: "{{HOMEPAGE_VAR_JELLYFIN_URL}}"
         description: Media Server
         widget:
           type: jellyfin
@@ -55,6 +60,7 @@
     - Jellyseerr:
         icon: jellyseerr.png
         href: "{{HOMEPAGE_VAR_JELLYSEERR_URL}}"
+        siteMonitor: "{{HOMEPAGE_VAR_JELLYSEERR_URL}}"
         description: Media Request Server
         widget:
           type: jellyseerr
@@ -93,6 +99,7 @@
     - Autobrr:
         icon: autobrr.png
         href: "{{HOMEPAGE_VAR_AUTOBRR_URL}}"
+        siteMonitor: "{{HOMEPAGE_VAR_AUTOBRR_URL}}"
         description: Auto Download Tool
         widget:
           type: autobrr
@@ -102,6 +109,7 @@
     - PiHole:
         icon: pi-hole.png
         href: "{{HOMEPAGE_VAR_PIHOLE_WEB_URL}}"
+        siteMonitor: "{{HOMEPAGE_VAR_PIHOLE_WEB_URL}}"
         description: Network-wide Ad Blocker
         widget:
           type: pihole
@@ -118,11 +126,13 @@
     - GoAccess:
         icon: goaccess.png
         href: "{{HOMEPAGE_VAR_GOACCESS_URL}}"
+        siteMonitor: "{{HOMEPAGE_VAR_GOACCESS_URL}}"
         description: Web log analyzer
 - Misc:
     - Portainer:
         icon: portainer-alt.png
         href: "{{HOMEPAGE_VAR_PORTAINER_URL}}"
+        siteMonitor: "{{HOMEPAGE_VAR_PORTAINER_URL}}"
         description: Docker Containers Manager
         widget:
           type: portainer
@@ -133,6 +143,7 @@
     - Authentik:
         icon: authentik.png
         href: "{{HOMEPAGE_VAR_AUTHENTIK_URL}}"
+        siteMonitor: "{{HOMEPAGE_VAR_AUTHENTIK_URL_INTERNAL}}"
         description: Identity Provider (IdP) for modern SSO
         widget:
           type: authentik
@@ -147,4 +158,5 @@
     - Notifiarr Client:
         icon: notifiarr.png
         href: "{{HOMEPAGE_VAR_NOTIFIARR_CLIENT_URL}}"
+        siteMonitor: "{{HOMEPAGE_VAR_NOTIFIARR_CLIENT_URL}}"
         description: Notifiarr Client
