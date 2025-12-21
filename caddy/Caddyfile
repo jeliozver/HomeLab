@@ -49,7 +49,7 @@
 
 # Common encoding
 (encoding) {
-    encode zstd gzip
+  encode zstd gzip
 }
 
 # Allowed IP's
@@ -110,4 +110,17 @@ auth.jeliozver.com {
   import allowed_ip
 
   reverse_proxy @allowed 192.168.100.X:9000
+}
+
+# Vaultwarden config
+vaultwarden.jeliozver.com {
+  import tls_porkbun
+  import headers
+  import encoding
+  import log
+  import allowed_ip_local_only
+
+  reverse_proxy @allowed 127.0.0.1:7000 {
+     header_up X-Real-IP {remote_host}
+  }
 }

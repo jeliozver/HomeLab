@@ -116,19 +116,11 @@
           url: "{{HOMEPAGE_VAR_PIHOLE_URL}}"
           version: 6
           key: "{{HOMEPAGE_VAR_PIHOLE_API_KEY}}"
-    - Caddy:
-        icon: caddy.png
-        href: "https://caddyserver.com"
-        description: Reverse Proxy
-        widget:
-          type: caddy
-          url: "{{HOMEPAGE_VAR_CADDY_URL}}"
     - GoAccess:
         icon: goaccess.png
         href: "{{HOMEPAGE_VAR_GOACCESS_URL}}"
         siteMonitor: "{{HOMEPAGE_VAR_GOACCESS_URL}}"
         description: Web log analyzer
-- Misc:
     - Portainer:
         icon: portainer-alt.png
         href: "{{HOMEPAGE_VAR_PORTAINER_URL}}"
@@ -140,6 +132,11 @@
           env: 6
           kubernetes: false
           key: "{{HOMEPAGE_VAR_PORTAINER_API_KEY}}"
+- Auth:
+    - Vaultwarden:
+        icon: vaultwarden.png
+        href: "{{HOMEPAGE_VAR_VAULTWARDEN_URL}}"
+        description: Password Manager
     - Authentik:
         icon: authentik.png
         href: "{{HOMEPAGE_VAR_AUTHENTIK_URL}}"

@@ -1,0 +1,14 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    user: "${PUID}:${PGID}"
+    restart: unless-stopped
+    environment:
+      - DOMAIN=${VAULTWARDEN_DOMAN}
+      - SIGNUPS_ALLOWED=false
+      - INVITATIONS_ALLOWED=false
+    volumes:
+      - ./vw-data/:/data/
+    ports:
+      - "127.0.0.1:${VAULTWARDEN_PORT}:80"

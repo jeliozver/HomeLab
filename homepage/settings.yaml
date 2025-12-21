@@ -33,7 +33,7 @@ layout:
     header: true
     style: row
     columns: 3
-  Misc:
+  Auth:
     header: true
     style: row
     columns: 2
