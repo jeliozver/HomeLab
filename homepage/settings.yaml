@@ -18,26 +18,32 @@ background:
 
 layout:
   Starr Apps:
+    icon: servarr.png
     header: true
     style: row
     columns: 4
   Media Apps:
+    icon: mdi-play-network-#FFFFFF
     header: true
     style: row
     columns: 3
   Torrenting:
+    icon: yarr.png
     header: true
     style: row
     columns: 3
   Networking:
+    icon: mdi-network-#FFFFFF
     header: true
     style: row
     columns: 3
   Auth:
+    icon: mdi-shield-lock-#FFFFFF
     header: true
     style: row
     columns: 2
   Notifications:
+    icon: mdi-bell-#FFFFFF
     header: true
     style: row
     columns: 2
