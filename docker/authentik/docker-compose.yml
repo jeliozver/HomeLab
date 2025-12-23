@@ -15,6 +15,7 @@ services:
         - pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}
       timeout: 5s
     image: docker.io/library/postgres:16-alpine
+    container_name: authentik-db
     restart: unless-stopped
     volumes:
       - database:/var/lib/postgresql/data
@@ -32,6 +33,7 @@ services:
       AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
       AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?secret key required}
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.10.3}
+    container_name: authentik-server
     ports:
       - ${COMPOSE_PORT_HTTP:-9000}:9000
       - ${COMPOSE_PORT_HTTPS:-9443}:9443
@@ -53,6 +55,7 @@ services:
       AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
       AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?secret key required}
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.10.3}
+    container_name: authentik-worker
     restart: unless-stopped
     user: root
     volumes:

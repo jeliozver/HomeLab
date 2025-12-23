@@ -10,7 +10,7 @@
 (log) {
   log {
     output file /var/log/caddy/access.log
-     format json
+    format json
    }
 }
 
@@ -42,7 +42,6 @@
   header {
     -Server
     Strict-Transport-Security "max-age=63072000"
-    # Opt-out search engines
     X-Robots-Tag "noindex, nofollow, nosnippet, noarchive"
   }
 }
@@ -66,6 +65,19 @@
   @blocked not remote_ip 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8 127.0.0.1/8
 
   respond @blocked "Access denied!" 403
+}
+
+# Authenticate with authentik forward proxy auth
+(authenticate) {
+  import allowed_ip_local_only
+
+  reverse_proxy @allowed /outpost.goauthentik.io/* 192.168.100.X:9000
+
+  forward_auth 192.168.100.X:9000 {
+    uri /outpost.goauthentik.io/auth/caddy
+    copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Entitlements X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version
+    trusted_proxies private_ranges
+  }
 }
 
 # Jellyfin subdomain config
@@ -121,6 +133,106 @@ vaultwarden.jeliozver.com {
   import allowed_ip_local_only
 
   reverse_proxy @allowed 127.0.0.1:7000 {
-     header_up X-Real-IP {remote_host}
+    header_up X-Real-IP {remote_host}
   }
+}
+
+# Sonarr config
+sonarr.jeliozver.com {
+  import tls_porkbun
+  import headers
+  import encoding
+  import log
+  import allowed_ip_local_only
+
+  reverse_proxy @allowed 192.168.100.X:8989
+}
+
+# Radarr config
+radarr.jeliozver.com {
+  import tls_porkbun
+  import headers
+  import encoding
+  import log
+  import allowed_ip_local_only
+
+  reverse_proxy @allowed 192.168.100.X:7878
+}
+
+# Prowlarr config
+prowlarr.jeliozver.com {
+  import tls_porkbun
+  import headers
+  import encoding
+  import log
+  import allowed_ip_local_only
+
+  reverse_proxy @allowed 192.168.100.X:9696
+}
+
+# Bazarr config
+bazarr.jeliozver.com {
+  import tls_porkbun
+  import headers
+  import encoding
+  import log
+  import allowed_ip_local_only
+
+  reverse_proxy @allowed 192.168.100.X:6767
+}
+
+# Notifiarr config
+notifiarr.jeliozver.com {
+  import tls_porkbun
+  import headers
+  import encoding
+  import log
+  import allowed_ip_local_only
+
+  reverse_proxy @allowed 192.168.100.X:5454
+}
+
+# Autobrr config
+autobrr.jeliozver.com {
+  import tls_porkbun
+  import headers
+  import encoding
+  import log
+  import allowed_ip_local_only
+
+  reverse_proxy @allowed 192.168.100.X:7474
+}
+
+# Qui config
+qui.jeliozver.com {
+  import tls_porkbun
+  import headers
+  import encoding
+  import log
+  import allowed_ip_local_only
+
+  reverse_proxy @allowed 192.168.100.X:7476
+}
+
+# Portainer config
+portainer.jeliozver.com {
+  import tls_porkbun
+  import headers
+  import encoding
+  import log
+  import allowed_ip_local_only
+
+  reverse_proxy @allowed 192.168.100.X:9443
+}
+
+# Homepage config
+homepage.jeliozver.com {
+  import tls_porkbun
+  import headers
+  import encoding
+  import log
+  import allowed_ip_local_only
+  import authenticate
+
+  reverse_proxy @allowed 192.168.100.X:3000
 }

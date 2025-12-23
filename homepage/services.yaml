@@ -1,12 +1,9 @@
 ---
-# For configuration options and examples, please see:
-# https://gethomepage.dev/configs/services/
 
 - Starr Apps:
     - Sonarr:
         icon: sonarr.png
         href: "{{HOMEPAGE_VAR_SONARR_URL}}"
-        siteMonitor: "{{HOMEPAGE_VAR_SONARR_URL}}"
         description: TV Series Manager
         widget:
           type: sonarr
@@ -16,36 +13,32 @@
     - Radarr:
         icon: radarr.png
         href: "{{HOMEPAGE_VAR_RADARR_URL}}"
-        siteMonitor: "{{HOMEPAGE_VAR_RADARR_URL}}"
         description: Movies Manager
         widget:
           type: radarr
           url: "{{HOMEPAGE_VAR_RADARR_URL}}"
           key: "{{HOMEPAGE_VAR_RADARR_API_KEY}}"
           enableQueue: true
-    - Bazarr:
-        icon: bazarr.png
-        href: "{{HOMEPAGE_VAR_BAZARR_URL}}"
-        siteMonitor: "{{HOMEPAGE_VAR_BAZARR_URL}}"
-        description: Subtitles Manager
-        widget:
-          type: bazarr
-          url: "{{HOMEPAGE_VAR_BAZARR_URL}}"
-          key: "{{HOMEPAGE_VAR_BAZARR_API_KEY}}"
     - Prowlarr:
         icon: prowlarr.png
         href: "{{HOMEPAGE_VAR_PROWLARR_URL}}"
-        siteMonitor: "{{HOMEPAGE_VAR_PROWLARR_URL}}"
         description: Indexers Manager
         widget:
           type: prowlarr
           url: "{{HOMEPAGE_VAR_PROWLARR_URL}}"
           key: "{{HOMEPAGE_VAR_PROWLARR_API_KEY}}"
+    - Bazarr:
+        icon: bazarr.png
+        href: "{{HOMEPAGE_VAR_BAZARR_URL}}"
+        description: Subtitles Manager
+        widget:
+          type: bazarr
+          url: "{{HOMEPAGE_VAR_BAZARR_URL}}"
+          key: "{{HOMEPAGE_VAR_BAZARR_API_KEY}}"
 - Media Apps:
     - Jellyfin:
         icon: jellyfin.png
         href: "{{HOMEPAGE_VAR_JELLYFIN_URL}}"
-        siteMonitor: "{{HOMEPAGE_VAR_JELLYFIN_URL}}"
         description: Media Server
         widget:
           type: jellyfin
@@ -60,8 +53,9 @@
     - Jellyseerr:
         icon: jellyseerr.png
         href: "{{HOMEPAGE_VAR_JELLYSEERR_URL}}"
-        siteMonitor: "{{HOMEPAGE_VAR_JELLYSEERR_URL}}"
         description: Media Request Server
+        server: raspberry-docker
+        container: jellyseerr
         widget:
           type: jellyseerr
           url: "{{HOMEPAGE_VAR_JELLYSEERR_URL}}"
@@ -70,15 +64,19 @@
         icon: audiobookshelf.png
         href: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_URL}}"
         description: Audiobooks Server
+        server: raspberry-docker
+        container: audiobookshelf
         widget:
           type: audiobookshelf
           url: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_URL}}"
           key: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_API_KEY}}"
 - Torrenting:
-    - Qbit:
-        icon: qbittorrent.png
+    - qui:
+        icon: qui.png
         href: "{{HOMEPAGE_VAR_QUI_URL}}"
-        description: Qbit Torrent Client
+        description: Web interface for qBittorrent
+        server: raspberry-docker
+        container: qui
         widget:
           type: qbittorrent
           url: "{{HOMEPAGE_VAR_QBIT_URL}}"
@@ -99,17 +97,27 @@
     - Autobrr:
         icon: autobrr.png
         href: "{{HOMEPAGE_VAR_AUTOBRR_URL}}"
-        siteMonitor: "{{HOMEPAGE_VAR_AUTOBRR_URL}}"
         description: Auto Download Tool
         widget:
           type: autobrr
           url: "{{HOMEPAGE_VAR_AUTOBRR_URL}}"
           key: "{{HOMEPAGE_VAR_AUTOBRR_API_KEY}}"
 - Networking:
+    - Portainer:
+        icon: portainer-alt.png
+        href: "{{HOMEPAGE_VAR_PORTAINER_URL}}"
+        description: Docker Containers Manager
+        server: raspberry-docker
+        container: portainer
+        widget:
+          type: portainer
+          url: "{{HOMEPAGE_VAR_PORTAINER_URL}}"
+          env: 6
+          kubernetes: false
+          key: "{{HOMEPAGE_VAR_PORTAINER_API_KEY}}"
     - PiHole:
         icon: pi-hole.png
         href: "{{HOMEPAGE_VAR_PIHOLE_WEB_URL}}"
-        siteMonitor: "{{HOMEPAGE_VAR_PIHOLE_WEB_URL}}"
         description: Network-wide Ad Blocker
         widget:
           type: pihole
@@ -119,34 +127,27 @@
     - GoAccess:
         icon: goaccess.png
         href: "{{HOMEPAGE_VAR_GOACCESS_URL}}"
-        siteMonitor: "{{HOMEPAGE_VAR_GOACCESS_URL}}"
         description: Web log analyzer
-    - Portainer:
-        icon: portainer-alt.png
-        href: "{{HOMEPAGE_VAR_PORTAINER_URL}}"
-        siteMonitor: "{{HOMEPAGE_VAR_PORTAINER_URL}}"
-        description: Docker Containers Manager
-        widget:
-          type: portainer
-          url: "{{HOMEPAGE_VAR_PORTAINER_URL}}"
-          env: 6
-          kubernetes: false
-          key: "{{HOMEPAGE_VAR_PORTAINER_API_KEY}}"
+        server: raspberry-docker
+        container: goaccess
 - Auth:
-    - Vaultwarden:
-        icon: vaultwarden.png
-        href: "{{HOMEPAGE_VAR_VAULTWARDEN_URL}}"
-        description: Password Manager
     - Authentik:
         icon: authentik.png
         href: "{{HOMEPAGE_VAR_AUTHENTIK_URL}}"
-        siteMonitor: "{{HOMEPAGE_VAR_AUTHENTIK_URL_INTERNAL}}"
         description: Identity Provider (IdP) for modern SSO
+        server: raspberry-docker
+        container: authentik-server
         widget:
           type: authentik
           url: "{{HOMEPAGE_VAR_AUTHENTIK_URL}}"
           key: "{{HOMEPAGE_VAR_AUTHENTIK_API_KEY}}"
           version: 2
+    - Vaultwarden:
+        icon: vaultwarden.png
+        href: "{{HOMEPAGE_VAR_VAULTWARDEN_URL}}"
+        description: Password Manager
+        server: raspberry-docker
+        container: vaultwarden
 - Notifications:
     - Notifiarr Web:
         icon: notifiarr.png
@@ -155,5 +156,4 @@
     - Notifiarr Client:
         icon: notifiarr.png
         href: "{{HOMEPAGE_VAR_NOTIFIARR_CLIENT_URL}}"
-        siteMonitor: "{{HOMEPAGE_VAR_NOTIFIARR_CLIENT_URL}}"
         description: Notifiarr Client
