@@ -1,7 +1,7 @@
 # Docker compose config for homelab stack. Configured to support hardlinks for radarr, sonarr, cross-seed
 services:
   # ------------------------
-  # Torrent clients
+  # Torrents
   # ------------------------
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:5.1.2
@@ -12,7 +12,6 @@ services:
       - TZ=${TZ}
       - WEBUI_PORT=5252
       - TORRENTING_PORT=45878
-      - DOCKER_MODS=ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest
     volumes:
       - ${APPS_BASE_PATH}/qbit/config:/config
       - ${DATA_BASE_PATH}:/data
@@ -37,6 +36,36 @@ services:
       - "45969:6881" #torrent port
       - "45969:6881/udp" #torrent port
       - "58846:58846" #Default deluged port for thin client connectivity
+    restart: unless-stopped
+  qui:
+    image: ghcr.io/autobrr/qui:latest
+    container_name: qui
+    ports:
+      - "7476:7476"
+    volumes:
+      - ${APPS_BASE_PATH}/qui/config:/config
+    restart: unless-stopped
+  autobrr:
+    image: ghcr.io/autobrr/autobrr:latest
+    container_name: autobrr
+    user: "${PUID}:${PGID}"
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ${APPS_BASE_PATH}/autobrr/config:/config
+    ports:
+      - "7474:7474"
+    restart: unless-stopped
+  cross-seed:
+    image: ghcr.io/cross-seed/cross-seed:6
+    container_name: cross-seed
+    user: "${PUID}:${PGID}"
+    volumes:
+      - ${APPS_BASE_PATH}/cross-seed/config:/config
+      - ${DATA_BASE_PATH}:/data
+    ports:
+      - "2468:2468"
+    command: daemon
     restart: unless-stopped
   # ------------------------
   # Starr apss
@@ -106,31 +135,6 @@ services:
       - "5454:5454"
     restart: unless-stopped
   # ------------------------
-  # Brr + cross-seed
-  # ------------------------
-  autobrr:
-    image: ghcr.io/autobrr/autobrr:latest
-    container_name: autobrr
-    user: "${PUID}:${PGID}"
-    environment:
-      - TZ=${TZ}
-    volumes:
-      - ${APPS_BASE_PATH}/autobrr/config:/config
-    ports:
-      - "7474:7474"
-    restart: unless-stopped
-  cross-seed:
-    image: ghcr.io/cross-seed/cross-seed:6
-    container_name: cross-seed
-    user: "${PUID}:${PGID}"
-    volumes:
-      - ${APPS_BASE_PATH}/cross-seed/config:/config
-      - ${DATA_BASE_PATH}:/data
-    ports:
-      - "2468:2468"
-    command: daemon
-    restart: unless-stopped
-  # ------------------------
   # Media Server
   # ------------------------
   audiobookshelf:
@@ -185,14 +189,6 @@ services:
   # ------------------------
   # Misc
   # ------------------------
-  qui:
-    image: ghcr.io/autobrr/qui:latest
-    container_name: qui
-    ports:
-      - "7476:7476"
-    volumes:
-      - ${APPS_BASE_PATH}/qui/config:/config
-    restart: unless-stopped
   goaccess:
     image: "xavierh/goaccess-for-nginxproxymanager:latest"
     container_name: goaccess
