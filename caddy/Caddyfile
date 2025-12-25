@@ -51,138 +51,167 @@
   encode zstd gzip
 }
 
+# Forward real ip headers
+(real_ip_headers) {
+  header_up X-Real-IP {remote_host}
+  header_up X-Forwarded-For {remote_host}
+  header_up X-Forwarded-Proto {scheme}
+  header_up X-Forwarded-Host {host}
+}
+
+# 192.168.100.0/24 - Home devices
+# 10.224.174.0/24 - WireGuard VPN
+# 127.0.0.1/32 - Localhost
+
 # Allowed IP's
 (allowed_ip) {
-  @blocked not client_ip 192.168.100.0/24 10.6.0.0/24 127.0.0.1/32
-
-  respond @blocked "Forbidden" 403
+  remote_ip 192.168.100.0/24 10.224.174.0/24 127.0.0.1/32
 }
 
 # Allowed IP's Local only
 (allowed_ip_local_only) {
-  @blocked not client_ip 192.168.100.0/24 10.6.0.0/24 127.0.0.1/32
-
-  respond @blocked "Forbidden" 403
+  remote_ip 192.168.100.0/24 10.224.174.0/24 127.0.0.1/32
 }
 
 # Authenticate with Аuthentik forward proxy auth
 (authenticate) {
-  reverse_proxy /outpost.goauthentik.io/* 192.168.100.X:9000
+  reverse_proxy /outpost.goauthentik.io/* 192.168.100.13:9000
 
-  forward_auth 192.168.100.X:9000 {
+  forward_auth 192.168.100.13:9000 {
     uri /outpost.goauthentik.io/auth/caddy
     copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Entitlements X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version
     trusted_proxies private_ranges
   }
 }
 
-jellyfin.jeliozver.com {
-  import tls_porkbun
-  import headers
-  import encoding
-  import log
-  import allowed_ip
-
-  reverse_proxy 192.168.100.X:8096
-}
-
-jellyseerr.jeliozver.com {
-  import tls_porkbun
-  import headers
-  import encoding
-  import log
-  import allowed_ip
-
-  reverse_proxy 192.168.100.X:5055
-}
-
-abs.jeliozver.com {
-  import tls_porkbun
-  import headers
-  import encoding
-  import log
-  import allowed_ip
-
-  reverse_proxy 192.168.100.X:13378
-}
-
-auth.jeliozver.com {
-  import tls_porkbun
-  import headers
-  import encoding
-  import log
-  import allowed_ip
-
-  reverse_proxy 192.168.100.X:9000
-}
-
-# Wildcard for internal usage only
 *.jeliozver.com {
   import tls_porkbun
   import headers
   import encoding
   import log
-  import allowed_ip_local_only
 
-  handle @blocked {
-    respond "Forbidden!" 403
+  # Home + VPN + Local + Allowed public --- START
+  @jellyfin {
+    host jellyfin.jeliozver.com
+    import allowed_ip
+  }
+  handle @jellyfin {
+    reverse_proxy 192.168.100.3:8096 {
+      import real_ip_headers
+    }
   }
 
-  @vaultwarden host vaultwarden.jeliozver.com
+  @jellyseerr {
+    host jellyseerr.jeliozver.com
+    import allowed_ip
+  }
+  handle @jellyseerr {
+    reverse_proxy 192.168.100.13:5055 {
+      import real_ip_headers
+    }
+  }
+
+  @audiobookshelf {
+    host abs.jeliozver.com
+    import allowed_ip
+  }
+  handle @audiobookshelf {
+    reverse_proxy 192.168.100.13:13378 {
+      import real_ip_headers
+    }
+  }
+
+  @authentik {
+    host auth.jeliozver.com
+    import allowed_ip
+  }
+  handle @authentik {
+    reverse_proxy 192.168.100.13:9000 {
+      import real_ip_headers
+    }
+  }
+
+  # Home + VPN + Local + Allowed public --- END
+
+  # Home + VPN + Local --- START
+  @vaultwarden {
+    host vaultwarden.jeliozver.com
+    import allowed_ip_local_only
+  }
   handle @vaultwarden {
     reverse_proxy 127.0.0.1:7000 {
-      header_up X-Real-IP {remote_host}
+      import real_ip_headers
     }
   }
 
   @sonarr host sonarr.jeliozver.com
   handle @sonarr {
-    reverse_proxy 192.168.100.X:8989
+    reverse_proxy 192.168.100.3:8989 {
+      import real_ip_headers
+    }
   }
 
   @radarr host radarr.jeliozver.com
   handle @radarr {
-    reverse_proxy 192.168.100.X:7878
+    reverse_proxy 192.168.100.3:7878 {
+      import real_ip_headers
+    }
   }
 
   @prowlarr host prowlarr.jeliozver.com
   handle @prowlarr {
-    reverse_proxy 192.168.100.X:9696
+    reverse_proxy 192.168.100.3:9696 {
+      import real_ip_headers
+    }
   }
 
   @bazarr host bazarr.jeliozver.com
   handle @bazarr {
-    reverse_proxy 192.168.100.X:6767
+    reverse_proxy 192.168.100.3:6767 {
+      import real_ip_headers
+    }
   }
 
   @notifiarr host notifiarr.jeliozver.com
   handle @notifiarr {
-    reverse_proxy 192.168.100.X:5454
+    reverse_proxy 192.168.100.3:5454 {
+      import real_ip_headers
+    }
   }
 
   @autobrr host autobrr.jeliozver.com
   handle @autobrr {
-    reverse_proxy 192.168.100.X:7474
+    reverse_proxy 192.168.100.3:7474 {
+      import real_ip_headers
+    }
   }
 
   @qui host qui.jeliozver.com
   handle @qui {
-    reverse_proxy 192.168.100.X:7476
+    reverse_proxy 192.168.100.13:7476 {
+     import real_ip_headers
+    }
   }
 
   @portainer host portainer.jeliozver.com
   handle @portainer {
-    reverse_proxy 192.168.100.X:9443
+    reverse_proxy 192.168.100.13:9443 {
+     import real_ip_headers
+    }
   }
 
   @homepage host homepage.jeliozver.com
   handle @homepage {
     import authenticate
 
-    reverse_proxy 192.168.100.X:3000
+    reverse_proxy 192.168.100.13:3000 {
+      import real_ip_headers
+    }
   }
 
+  # Home + VPN + Local --- END
+
   handle {
-    respond "Not found" 404
+    respond "Forbidden" 403
   }
 }

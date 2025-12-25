@@ -42,7 +42,7 @@
         description: Media Server
         widget:
           type: jellyfin
-          url: "{{HOMEPAGE_VAR_JELLYFIN_URL}}"
+          url: "{{HOMEPAGE_VAR_JELLYFIN_INTERNAL_URL}}"
           key: "{{HOMEPAGE_VAR_JELLYFIN_API_KEY}}"
           enableBlocks: true
           enableNowPlaying: true
@@ -58,7 +58,7 @@
         container: jellyseerr
         widget:
           type: jellyseerr
-          url: "{{HOMEPAGE_VAR_JELLYSEERR_URL}}"
+          url: "{{HOMEPAGE_VAR_JELLYSEERR_INTERNAL_URL}}"
           key: "{{HOMEPAGE_VAR_JELLYSEERR_API_KEY}}"
     - Audiobookshelf:
         icon: audiobookshelf.png
@@ -68,7 +68,7 @@
         container: audiobookshelf
         widget:
           type: audiobookshelf
-          url: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_URL}}"
+          url: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_INTERNAL_URL}}"
           key: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_API_KEY}}"
 - Torrenting:
     - qui:
@@ -139,7 +139,7 @@
         container: authentik-server
         widget:
           type: authentik
-          url: "{{HOMEPAGE_VAR_AUTHENTIK_URL}}"
+          url: "{{HOMEPAGE_VAR_AUTHENTIK_INTERNAL_URL}}"
           key: "{{HOMEPAGE_VAR_AUTHENTIK_API_KEY}}"
           version: 2
     - Vaultwarden:

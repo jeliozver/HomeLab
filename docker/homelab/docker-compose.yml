@@ -154,7 +154,6 @@ services:
     image: jellyfin/jellyfin
     container_name: jellyfin
     user: "${PUID}:${PGID}"
-    network_mode: 'host'
     # For Hardware Acceleration
     # https://jellyfin.org/docs/general/post-install/transcoding/hardware-acceleration
     volumes:
