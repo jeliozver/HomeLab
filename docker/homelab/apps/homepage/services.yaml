@@ -71,6 +71,16 @@
           url: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_INTERNAL_URL}}"
           key: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_API_KEY}}"
 - Torrenting:
+    - Autobrr:
+        icon: autobrr.png
+        href: "{{HOMEPAGE_VAR_AUTOBRR_URL}}"
+        description: Auto Download Tool
+        server: raspberry-docker
+        container: autobrr
+        widget:
+          type: autobrr
+          url: "{{HOMEPAGE_VAR_AUTOBRR_URL}}"
+          key: "{{HOMEPAGE_VAR_AUTOBRR_API_KEY}}"
     - qui:
         icon: qui.png
         href: "{{HOMEPAGE_VAR_QUI_URL}}"
@@ -94,14 +104,6 @@
           username: "{{HOMEPAGE_VAR_TRANSMISSION_USERNAME}}"
           password: "{{HOMEPAGE_VAR_TRANSMISSION_PASS}}"
           rpcUrl: /transmission/
-    - Autobrr:
-        icon: autobrr.png
-        href: "{{HOMEPAGE_VAR_AUTOBRR_URL}}"
-        description: Auto Download Tool
-        widget:
-          type: autobrr
-          url: "{{HOMEPAGE_VAR_AUTOBRR_URL}}"
-          key: "{{HOMEPAGE_VAR_AUTOBRR_API_KEY}}"
 - Networking:
     - Portainer:
         icon: portainer-alt.png
