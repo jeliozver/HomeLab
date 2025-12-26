@@ -205,7 +205,7 @@ services:
       - KEEP_LAST=30
       - PROCESSING_THREADS=1
     volumes:
-      - /var/log/caddy:/opt/log
+      - /var/log/caddy:/opt/log:ro
   dockerproxy:
     image: ghcr.io/tecnativa/docker-socket-proxy:latest
     container_name: dockerproxy
@@ -230,6 +230,6 @@ services:
     volumes:
       - ${APPS_BASE_PATH}/homepage:/app/config
     environment:
-      - HOMEPAGE_ALLOWED_HOSTS=192.168.100.13:3000,192.168.100.12:3000,192.168.100.3:3000
+      - HOMEPAGE_ALLOWED_HOSTS=192.168.100.13:3000
       - PUID=${PUID}
       - PGID=${PGID}
