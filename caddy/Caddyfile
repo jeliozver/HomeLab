@@ -87,7 +87,6 @@
   import encoding
   import log
 
-  # Home + VPN + Local + Allowed public --- START
   @jellyfin {
     host jellyfin.jeliozver.com
     import allowed_ip
@@ -128,9 +127,6 @@
     }
   }
 
-  # Home + VPN + Local + Allowed public --- END
-
-  # Home + VPN + Local --- START
   @vaultwarden {
     host vaultwarden.jeliozver.com
     import allowed_ip_local_only
@@ -140,73 +136,6 @@
       import real_ip_headers
     }
   }
-
-  @sonarr host sonarr.jeliozver.com
-  handle @sonarr {
-    reverse_proxy 192.168.100.3:8989 {
-      import real_ip_headers
-    }
-  }
-
-  @radarr host radarr.jeliozver.com
-  handle @radarr {
-    reverse_proxy 192.168.100.3:7878 {
-      import real_ip_headers
-    }
-  }
-
-  @prowlarr host prowlarr.jeliozver.com
-  handle @prowlarr {
-    reverse_proxy 192.168.100.3:9696 {
-      import real_ip_headers
-    }
-  }
-
-  @bazarr host bazarr.jeliozver.com
-  handle @bazarr {
-    reverse_proxy 192.168.100.3:6767 {
-      import real_ip_headers
-    }
-  }
-
-  @notifiarr host notifiarr.jeliozver.com
-  handle @notifiarr {
-    reverse_proxy 192.168.100.3:5454 {
-      import real_ip_headers
-    }
-  }
-
-  @autobrr host autobrr.jeliozver.com
-  handle @autobrr {
-    reverse_proxy 192.168.100.3:7474 {
-      import real_ip_headers
-    }
-  }
-
-  @qui host qui.jeliozver.com
-  handle @qui {
-    reverse_proxy 192.168.100.13:7476 {
-     import real_ip_headers
-    }
-  }
-
-  @portainer host portainer.jeliozver.com
-  handle @portainer {
-    reverse_proxy 192.168.100.13:9443 {
-     import real_ip_headers
-    }
-  }
-
-  @homepage host homepage.jeliozver.com
-  handle @homepage {
-    import authenticate
-
-    reverse_proxy 192.168.100.13:3000 {
-      import real_ip_headers
-    }
-  }
-
-  # Home + VPN + Local --- END
 
   handle {
     respond "Forbidden" 403
