@@ -4,6 +4,7 @@
     output file /var/log/caddy/access.log
     format json
   }
+  admin off
 }
 
 # Logging template
@@ -51,12 +52,12 @@
   encode zstd gzip
 }
 
-# Forward real ip headers
+# Forward real IP headers
 (real_ip_headers) {
   header_up X-Real-IP {remote_host}
 }
 
-# 192.168.100.0/24 - Home devices
+# 192.168.100.0/24 - LAN devices
 # 10.224.174.0/24 - WireGuard VPN
 # 127.0.0.1/32 - Localhost
 
@@ -78,6 +79,27 @@
     uri /outpost.goauthentik.io/auth/caddy
     copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Entitlements X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version
     trusted_proxies private_ranges
+  }
+}
+
+# Common internal imports
+(common_internal_http) {
+  import encoding
+  import log
+}
+
+# Block access if IP ranges are not local
+(deny_if_not_local) {
+  @allowed {
+    import allowed_ip_local_only
+  }
+
+  handle @allowed {
+    reverse_proxy {args[0]}
+  }
+
+  handle {
+    respond "Access denied" 403
   }
 }
 
@@ -139,5 +161,63 @@
 
   handle {
     respond "Forbidden" 403
+  }
+}
+
+http://sonarr.home.arpa {
+  import common_internal_http
+  import deny_if_not_local 192.168.100.3:8989
+}
+
+http://radarr.home.arpa {
+  import common_internal_http
+  import deny_if_not_local 192.168.100.3:7878
+}
+
+http://prowlarr.home.arpa {
+  import common_internal_http
+  import deny_if_not_local 192.168.100.3:9696
+}
+
+http://bazarr.home.arpa {
+  import common_internal_http
+  import deny_if_not_local 192.168.100.3:6767
+}
+
+http://notifiarr.home.arpa {
+  import common_internal_http
+  import deny_if_not_local 192.168.100.3:5454
+}
+
+http://autobrr.home.arpa {
+  import common_internal_http
+  import deny_if_not_local 192.168.100.13:7474
+}
+
+http://qui.home.arpa {
+  import common_internal_http
+  import deny_if_not_local 192.168.100.13:7476
+}
+
+http://portainer.home.arpa {
+  import common_internal_http
+  import deny_if_not_local 192.168.100.13:9443
+}
+
+http://homepage.home.arpa {
+  import common_internal_http
+
+  @allowed {
+    import allowed_ip_local_only
+  }
+
+  handle @allowed {
+    import authenticate
+
+    reverse_proxy 192.168.100.13:3000
+  }
+
+  handle {
+    respond "Access denied" 403
   }
 }
