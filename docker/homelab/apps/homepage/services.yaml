@@ -83,20 +83,20 @@
           key: "{{HOMEPAGE_VAR_AUTOBRR_API_KEY}}"
     - qui:
         icon: qui.png
-        href: "{{HOMEPAGE_VAR_QUI_URL}}"
+        href: "{{HOMEPAGE_VAR_QBIT_URL}}"
         description: Web interface for qBittorrent
         server: raspberry-docker
         container: qui
         widget:
           type: qbittorrent
-          url: "{{HOMEPAGE_VAR_QBIT_URL}}"
+          url: "{{HOMEPAGE_VAR_QUI_URL}}"
           username: username
           password: password
           enableLeechProgress: true
           enableLeechSize: true
     - Transmission:
         icon: transmission.png
-        href: "{{HOMEPAGE_VAR_TRANSMISSION_WEB_URL}}"
+        href: "{{HOMEPAGE_VAR_TRANSMISSION_URL}}"
         description: Transmission Torrent Client
         widget:
           type: transmission
@@ -126,12 +126,18 @@
           url: "{{HOMEPAGE_VAR_PIHOLE_URL}}"
           version: 6
           key: "{{HOMEPAGE_VAR_PIHOLE_API_KEY}}"
-    - GoAccess:
+    - GoAccessPublic:
         icon: goaccess.png
-        href: "{{HOMEPAGE_VAR_GOACCESS_URL}}"
-        description: Web log analyzer
+        href: "{{HOMEPAGE_VAR_GOACCESS_PUBLIC_URL}}"
+        description: Web log analyzer public domain
         server: raspberry-docker
-        container: goaccess
+        container: goaccess-public
+    - GoAccessInternal:
+        icon: goaccess.png
+        href: "{{HOMEPAGE_VAR_GOACCESS_INTERNAL_URL}}"
+        description: Web log analyzer internal apps
+        server: raspberry-docker
+        container: goaccess-internal
 - Auth:
     - Authentik:
         icon: authentik.png

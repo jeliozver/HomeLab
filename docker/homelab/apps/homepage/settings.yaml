@@ -34,7 +34,7 @@ layout:
     icon: mdi-network-#FFFFFF
     header: true
     style: row
-    columns: 3
+    columns: 4
   Auth:
     icon: mdi-shield-lock-#FFFFFF
     header: true

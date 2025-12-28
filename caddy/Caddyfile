@@ -85,7 +85,11 @@
 # Common internal imports
 (common_internal_http) {
   import encoding
-  import log
+
+  log {
+    output file /var/log/caddy/internal/access.log
+    format json
+  }
 }
 
 # Block access if IP ranges are not local
@@ -99,7 +103,23 @@
   }
 
   handle {
-    respond "Access denied" 403
+    respond "403 Forbidden" 403
+  }
+}
+
+(deny_if_not_local_auth) {
+  @allowed {
+   import allowed_ip_local_only
+  }
+
+  handle @allowed {
+   import authenticate
+
+   reverse_proxy {args[0]}
+  }
+
+  handle {
+   respond "403 Forbidden" 403
   }
 }
 
@@ -160,7 +180,7 @@
   }
 
   handle {
-    respond "Forbidden" 403
+    respond "403 Forbidden" 403
   }
 }
 
@@ -199,12 +219,32 @@ http://qui.home.arpa {
   import deny_if_not_local 192.168.100.13:7476
 }
 
-http://portainer.home.arpa {
+http://transmission.home.arpa {
   import common_internal_http
-  import deny_if_not_local 192.168.100.13:9443
+  import deny_if_not_local 192.168.100.3:9092
+}
+
+http://goaccess-public.home.arpa {
+  import common_internal_http
+  import deny_if_not_local_auth 192.168.100.13:7880
+}
+
+http://goaccess-internal.home.arpa {
+  import common_internal_http
+  import deny_if_not_local_auth 192.168.100.13:7881
 }
 
 http://homepage.home.arpa {
+  import common_internal_http
+  import deny_if_not_local_auth 192.168.100.13:3000
+}
+
+http://pihole.home.arpa {
+  import common_internal_http
+  import deny_if_not_local 192.168.100.13:8080
+}
+
+http://portainer.home.arpa {
   import common_internal_http
 
   @allowed {
@@ -212,12 +252,15 @@ http://homepage.home.arpa {
   }
 
   handle @allowed {
-    import authenticate
-
-    reverse_proxy 192.168.100.13:3000
+    reverse_proxy https://192.168.100.13:9443 {
+      transport http {
+        tls
+        tls_insecure_skip_verify
+       }
+     }
   }
 
   handle {
-    respond "Access denied" 403
+   respond "403 Forbidden" 403
   }
 }
