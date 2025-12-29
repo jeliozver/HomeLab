@@ -1,16 +1,17 @@
 # Global logging
 {
   log {
-    output file /var/log/caddy/access.log
+    output file /var/log/caddy/global.log
     format json
   }
+
   admin off
 }
 
 # Logging template
 (log) {
   log {
-    output file /var/log/caddy/access.log
+    output file /var/log/caddy/public/access.log
     format json
    }
 }

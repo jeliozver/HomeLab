@@ -207,7 +207,7 @@ services:
       - KEEP_LAST=30
       - PROCESSING_THREADS=1
     volumes:
-      - /var/log/caddy:/opt/log:ro
+      - /var/log/caddy/public:/opt/log:ro
   goaccess-internal:
     image: "xavierh/goaccess-for-nginxproxymanager:latest"
     container_name: goaccess-internal
