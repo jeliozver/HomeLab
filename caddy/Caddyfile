@@ -245,6 +245,11 @@ http://pihole.home.arpa {
   import deny_if_not_local 192.168.100.13:8080
 }
 
+http://cross-seed.home.arpa {
+  import common_internal_http
+  import deny_if_not_local 192.168.100.3:2468
+}
+
 http://portainer.home.arpa {
   import common_internal_http
 

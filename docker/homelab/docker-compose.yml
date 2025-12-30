@@ -57,7 +57,7 @@ services:
       - "7474:7474"
     restart: unless-stopped
   cross-seed:
-    image: ghcr.io/cross-seed/cross-seed:6
+    image: ghcr.io/cross-seed/cross-seed:latest
     container_name: cross-seed
     user: "${PUID}:${PGID}"
     volumes:
@@ -170,12 +170,12 @@ services:
       - 'host.docker.internal:host-gateway'
     restart: 'unless-stopped'
   jellyseerr:
-    image: fallenbagel/jellyseerr:latest
+    image: ghcr.io/fallenbagel/jellyseerr:latest
     container_name: jellyseerr
+    init: true
     environment:
       - LOG_LEVEL=debug
       - TZ=${TZ}
-      - PORT=5055
     ports:
       - "5055:5055"
     volumes:
@@ -191,7 +191,7 @@ services:
   # Misc
   # ------------------------
   goaccess-public:
-    image: "xavierh/goaccess-for-nginxproxymanager:latest"
+    image: xavierh/goaccess-for-nginxproxymanager:latest
     container_name: goaccess-public
     restart: unless-stopped
     ports:
@@ -209,7 +209,7 @@ services:
     volumes:
       - /var/log/caddy/public:/opt/log:ro
   goaccess-internal:
-    image: "xavierh/goaccess-for-nginxproxymanager:latest"
+    image: xavierh/goaccess-for-nginxproxymanager:latest
     container_name: goaccess-internal
     restart: unless-stopped
     ports:
