@@ -14,5 +14,5 @@ backend = %(sshd_backend)s
 enabled = true
 port = http,https
 filter = caddy
-logpath = /var/log/caddy/*.log
+logpath = /var/log/caddy/public/*.log
 maxretry = 5
