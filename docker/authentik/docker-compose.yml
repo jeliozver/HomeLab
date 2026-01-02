@@ -26,6 +26,9 @@ services:
         condition: service_healthy
     env_file:
       - .env
+    networks:
+      - proxy-net
+      - default
     environment:
       AUTHENTIK_POSTGRESQL__HOST: postgresql
       AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
@@ -63,6 +66,9 @@ services:
       - ./media:/media
       - ./certs:/certs
       - ./custom-templates:/templates
+networks:
+  proxy-net:
+    external: true
 volumes:
   database:
     driver: local

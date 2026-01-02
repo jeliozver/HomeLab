@@ -44,6 +44,8 @@ services:
       - "7476:7476"
     volumes:
       - ${APPS_BASE_PATH}/qui/config:/config
+    networks:
+      - proxy-net
     restart: unless-stopped
   autobrr:
     image: ghcr.io/autobrr/autobrr:latest
@@ -53,6 +55,8 @@ services:
       - TZ=${TZ}
     volumes:
       - ${APPS_BASE_PATH}/autobrr/config:/config
+    networks:
+      - proxy-net
     ports:
       - "7474:7474"
     restart: unless-stopped
@@ -63,6 +67,8 @@ services:
     volumes:
       - ${APPS_BASE_PATH}/cross-seed/config:/config
       - ${DATA_BASE_PATH}:/data
+    networks:
+      - proxy-net
     ports:
       - "2468:2468"
     command: daemon
@@ -79,6 +85,8 @@ services:
       - TZ=${TZ}
     volumes:
       - ${APPS_BASE_PATH}/prowlarr/config:/config
+    networks:
+      - proxy-net
     ports:
       - "9696:9696"
     restart: unless-stopped
@@ -92,6 +100,8 @@ services:
     volumes:
       - ${APPS_BASE_PATH}/sonarr/config:/config
       - ${DATA_BASE_PATH}:/data
+    networks:
+      - proxy-net
     ports:
       - "8989:8989"
     restart: unless-stopped
@@ -105,6 +115,8 @@ services:
     volumes:
       - ${APPS_BASE_PATH}/radarr/config:/config
       - ${DATA_BASE_PATH}:/data
+    networks:
+      - proxy-net
     ports:
       - "7878:7878"
     restart: unless-stopped
@@ -118,6 +130,8 @@ services:
     volumes:
       - ${APPS_BASE_PATH}/bazarr/config:/config
       - ${DATA_BASE_PATH}:/data
+    networks:
+      - proxy-net
     ports:
       - "6767:6767"
     restart: unless-stopped
@@ -130,6 +144,8 @@ services:
       - ${APPS_BASE_PATH}/notifiarr/config:/config
       - /var/run/utmp:/var/run/utmp:ro
       - /etc/machine-id:/etc/machine-id
+    networks:
+      - proxy-net
       #- /mnt/nas/data:/synonas #drives to monitor
     ports:
       - "5454:5454"
@@ -147,6 +163,8 @@ services:
       - ${APPS_BASE_PATH}/audiobookshelf/metadata:/metadata
       - ${DATA_BASE_PATH}/media/audiobooks:/audiobooks
       - ${DATA_BASE_PATH}/media/podcasts:/podcasts
+    networks:
+      - proxy-net
     ports:
       - "13378:80"
     restart: unless-stopped
@@ -180,6 +198,8 @@ services:
       - "5055:5055"
     volumes:
       - ${APPS_BASE_PATH}/jellyseerr/config:/app/config
+    networks:
+      - proxy-net
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1
       start_period: 20s
@@ -208,6 +228,8 @@ services:
       - PROCESSING_THREADS=1
     volumes:
       - /var/log/caddy/public:/opt/log:ro
+    networks:
+      - proxy-net
   goaccess-internal:
     image: xavierh/goaccess-for-nginxproxymanager:latest
     container_name: goaccess-internal
@@ -226,6 +248,8 @@ services:
       - PROCESSING_THREADS=1
     volumes:
       - /var/log/caddy/internal:/opt/log:ro
+    networks:
+      - proxy-net
   dockerproxy:
     image: ghcr.io/tecnativa/docker-socket-proxy:latest
     container_name: dockerproxy
@@ -238,6 +262,8 @@ services:
       - "127.0.0.1:2375:2375"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - proxy-net
     restart: unless-stopped
   homepage:
     image: ghcr.io/gethomepage/homepage:latest
@@ -249,7 +275,12 @@ services:
       - .env
     volumes:
       - ${APPS_BASE_PATH}/homepage:/app/config
+    networks:
+      - proxy-net
     environment:
       - HOMEPAGE_ALLOWED_HOSTS=192.168.100.13:3000,homepage.home.arpa
       - PUID=${PUID}
       - PGID=${PGID}
+networks:
+  proxy-net:
+    external: true

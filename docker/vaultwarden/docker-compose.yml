@@ -17,5 +17,10 @@ services:
       - SSO_CLIENT_SECRET=${SSO_CLIENT_SECRET}
     volumes:
       - ./vw-data/:/data/
+    networks:
+      - proxy-net
     ports:
       - "127.0.0.1:${VAULTWARDEN_PORT}:80"
+networks:
+  proxy-net:
+    external: true
