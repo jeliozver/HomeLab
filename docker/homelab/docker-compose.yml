@@ -281,6 +281,19 @@ services:
       - HOMEPAGE_ALLOWED_HOSTS=192.168.100.13:3000,homepage.home.arpa
       - PUID=${PUID}
       - PGID=${PGID}
+  beszel:
+    image: henrygd/beszel:latest
+    container_name: beszel
+    restart: unless-stopped
+    ports:
+      - "8090:8090"
+    volumes:
+      - ${APPS_BASE_PATH}/beszel_data:/beszel_data
+      - ${APPS_BASE_PATH}/beszel_socket:/beszel_socket
+    networks:
+      - proxy-net
+    environment:
+      - APP_URL=${HOMEPAGE_VAR_BESZEL_URL}
 networks:
   proxy-net:
     external: true
