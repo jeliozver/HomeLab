@@ -15,7 +15,6 @@ services:
         - pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}
       timeout: 5s
     image: docker.io/library/postgres:16-alpine
-    container_name: authentik-db
     restart: unless-stopped
     volumes:
       - database:/var/lib/postgresql/data
@@ -26,9 +25,6 @@ services:
         condition: service_healthy
     env_file:
       - .env
-    networks:
-      - proxy-net
-      - default
     environment:
       AUTHENTIK_POSTGRESQL__HOST: postgresql
       AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
@@ -36,7 +32,6 @@ services:
       AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
       AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?secret key required}
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.10.3}
-    container_name: authentik-server
     ports:
       - ${COMPOSE_PORT_HTTP:-9000}:9000
       - ${COMPOSE_PORT_HTTPS:-9443}:9443
@@ -51,29 +46,20 @@ services:
         condition: service_healthy
     env_file:
       - .env
-    networks:
-      - proxy-net
-      - default
     environment:
-      DOCKER_HOST: http://dockerproxy:2375
       AUTHENTIK_POSTGRESQL__HOST: postgresql
       AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
       AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
       AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
       AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?secret key required}
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.10.3}
-    container_name: authentik-worker
     restart: unless-stopped
     user: root
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - ./media:/media
       - ./certs:/certs
       - ./custom-templates:/templates
-
-networks:
-  proxy-net:
-    external: true
-
 volumes:
   database:
     driver: local

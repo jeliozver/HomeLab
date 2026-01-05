@@ -4,215 +4,210 @@ services:
   # Torrents
   # ------------------------
   qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:5.1.2
     container_name: qbittorrent
+    image: lscr.io/linuxserver/qbittorrent:5.1.2
+    restart: unless-stopped
+    ports:
+      - "5252:5252"
+      - "45878:45878"
+      - "45878:45878/udp"
+    volumes:
+      - ${APPS_BASE_PATH}/qbit/config:/config
+      - ${DATA_BASE_PATH}:/data
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
       - WEBUI_PORT=5252
       - TORRENTING_PORT=45878
-    volumes:
-      - ${APPS_BASE_PATH}/qbit/config:/config
-      - ${DATA_BASE_PATH}:/data
-    ports:
-      - "5252:5252"
-      - "45878:45878"
-      - "45878:45878/udp"
-    restart: unless-stopped
   deluge:
-    image: lscr.io/linuxserver/deluge:2.2.0
     container_name: deluge
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      #- DELUGE_LOGLEVEL=error #optional
-    volumes:
-      - ${APPS_BASE_PATH}/deluge/config:/config
-      - ${DATA_BASE_PATH}:/data
+    image: lscr.io/linuxserver/deluge:2.2.0
+    restart: unless-stopped
     ports:
       - "5353:8112" #web ui port
       - "45969:6881" #torrent port
       - "45969:6881/udp" #torrent port
       - "58846:58846" #Default deluged port for thin client connectivity
-    restart: unless-stopped
+    volumes:
+      - ${APPS_BASE_PATH}/deluge/config:/config
+      - ${DATA_BASE_PATH}:/data
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      #- DELUGE_LOGLEVEL=error #optional
   qui:
-    image: ghcr.io/autobrr/qui:latest
     container_name: qui
+    image: ghcr.io/autobrr/qui:latest
+    restart: unless-stopped
+    networks:
+      - proxy-net
     ports:
       - "7476:7476"
     volumes:
       - ${APPS_BASE_PATH}/qui/config:/config
-    networks:
-      - proxy-net
-    restart: unless-stopped
   autobrr:
-    image: ghcr.io/autobrr/autobrr:latest
     container_name: autobrr
-    user: "${PUID}:${PGID}"
-    environment:
-      - TZ=${TZ}
-    volumes:
-      - ${APPS_BASE_PATH}/autobrr/config:/config
+    image: ghcr.io/autobrr/autobrr:latest
+    restart: unless-stopped
     networks:
       - proxy-net
     ports:
       - "7474:7474"
-    restart: unless-stopped
-  cross-seed:
-    image: ghcr.io/cross-seed/cross-seed:latest
-    container_name: cross-seed
-    user: "${PUID}:${PGID}"
     volumes:
-      - ${APPS_BASE_PATH}/cross-seed/config:/config
-      - ${DATA_BASE_PATH}:/data
+      - ${APPS_BASE_PATH}/autobrr/config:/config
+    environment:
+      - TZ=${TZ}
+    user: "${PUID}:${PGID}"
+  cross-seed:
+    container_name: cross-seed
+    image: ghcr.io/cross-seed/cross-seed:latest
+    restart: unless-stopped
     networks:
       - proxy-net
     ports:
       - "2468:2468"
+    volumes:
+      - ${APPS_BASE_PATH}/cross-seed/config:/config
+      - ${DATA_BASE_PATH}:/data
     command: daemon
-    restart: unless-stopped
+    user: "${PUID}:${PGID}"
   # ------------------------
   # Starr apss
   # ------------------------
   prowlarr:
-    image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-    volumes:
-      - ${APPS_BASE_PATH}/prowlarr/config:/config
+    image: lscr.io/linuxserver/prowlarr:latest
+    restart: unless-stopped
     networks:
       - proxy-net
     ports:
       - "9696:9696"
-    restart: unless-stopped
-  sonarr:
-    image: lscr.io/linuxserver/sonarr:latest
-    container_name: sonarr
+    volumes:
+      - ${APPS_BASE_PATH}/prowlarr/config:/config
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-    volumes:
-      - ${APPS_BASE_PATH}/sonarr/config:/config
-      - ${DATA_BASE_PATH}:/data
+  sonarr:
+    container_name: sonarr
+    image: lscr.io/linuxserver/sonarr:latest
+    restart: unless-stopped
     networks:
       - proxy-net
     ports:
       - "8989:8989"
-    restart: unless-stopped
-  radarr:
-    image: lscr.io/linuxserver/radarr:latest
-    container_name: radarr
+    volumes:
+      - ${APPS_BASE_PATH}/sonarr/config:/config
+      - ${DATA_BASE_PATH}:/data
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-    volumes:
-      - ${APPS_BASE_PATH}/radarr/config:/config
-      - ${DATA_BASE_PATH}:/data
+  radarr:
+    container_name: radarr
+    image: lscr.io/linuxserver/radarr:latest
+    restart: unless-stopped
     networks:
       - proxy-net
     ports:
       - "7878:7878"
-    restart: unless-stopped
-  bazarr:
-    image: lscr.io/linuxserver/bazarr:latest
-    container_name: bazarr
+    volumes:
+      - ${APPS_BASE_PATH}/radarr/config:/config
+      - ${DATA_BASE_PATH}:/data
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-    volumes:
-      - ${APPS_BASE_PATH}/bazarr/config:/config
-      - ${DATA_BASE_PATH}:/data
+  bazarr:
+    container_name: bazarr
+    image: lscr.io/linuxserver/bazarr:latest
+    restart: unless-stopped
     networks:
       - proxy-net
     ports:
       - "6767:6767"
-    restart: unless-stopped
+    volumes:
+      - ${APPS_BASE_PATH}/bazarr/config:/config
+      - ${DATA_BASE_PATH}:/data
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
   notifiarr:
-    image: golift/notifiarr
     container_name: notifiarr
-    hostname: notifiarr
-    # privileged: true #for smartctl (monitor_drives) and/or MegaCli (monitor_raid
+    image: golift/notifiarr
+    restart: unless-stopped
+    networks:
+      - proxy-net
+    ports:
+      - "5454:5454"
     volumes:
       - ${APPS_BASE_PATH}/notifiarr/config:/config
       - /var/run/utmp:/var/run/utmp:ro
       - /etc/machine-id:/etc/machine-id
-    networks:
-      - proxy-net
-      #- /mnt/nas/data:/synonas #drives to monitor
-    ports:
-      - "5454:5454"
-    restart: unless-stopped
   # ------------------------
   # Media Server
   # ------------------------
   audiobookshelf:
-    image: ghcr.io/advplyr/audiobookshelf:latest
     container_name: audiobookshelf
-    environment:
-      - TZ=${TZ}
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    restart: unless-stopped
+    networks:
+      - proxy-net
+    ports:
+      - "13378:80"
     volumes:
       - ${APPS_BASE_PATH}/audiobookshelf/config:/config
       - ${APPS_BASE_PATH}/audiobookshelf/metadata:/metadata
       - ${DATA_BASE_PATH}/media/audiobooks:/audiobooks
       - ${DATA_BASE_PATH}/media/podcasts:/podcasts
+    environment:
+      - TZ=${TZ}
+  jellyfin:
+    container_name: jellyfin
+    image: jellyfin/jellyfin
+    restart: 'unless-stopped'
     networks:
       - proxy-net
     ports:
-      - "13378:80"
-    restart: unless-stopped
-  jellyfin:
-    image: jellyfin/jellyfin
-    container_name: jellyfin
-    user: "${PUID}:${PGID}"
-    ports:
       - "8096:8096/tcp"
-    # For Hardware Acceleration
-    # https://jellyfin.org/docs/general/post-install/transcoding/hardware-acceleration
     volumes:
       - ${APPS_BASE_PATH}/jellyfin/config:/config
       - ${APPS_BASE_PATH}/jellyfin/cache:/cache
       - ${DATA_BASE_PATH}/media/movies:/movies
       - ${DATA_BASE_PATH}/media/tvseries:/series
       - ${DATA_BASE_PATH}/media/anime:/anime
-    #environment:
-     #- JELLYFIN_PublishedServerUrl=http://example.com
+    user: "${PUID}:${PGID}"
     extra_hosts:
       - 'host.docker.internal:host-gateway'
-    restart: 'unless-stopped'
   jellyseerr:
-    image: ghcr.io/fallenbagel/jellyseerr:latest
     container_name: jellyseerr
-    init: true
-    environment:
-      - LOG_LEVEL=debug
-      - TZ=${TZ}
+    image: ghcr.io/fallenbagel/jellyseerr:latest
+    restart: unless-stopped
+    networks:
+      - proxy-net
     ports:
       - "5055:5055"
     volumes:
       - ${APPS_BASE_PATH}/jellyseerr/config:/app/config
-    networks:
-      - proxy-net
+    environment:
+      - LOG_LEVEL=debug
+      - TZ=${TZ}
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1
       start_period: 20s
       timeout: 3s
       interval: 15s
       retries: 3
-    restart: unless-stopped
   # ------------------------
   # Misc
   # ------------------------
   fail2ban:
-    image: crazymax/fail2ban:1.1.0
     container_name: fail2ban
+    image: crazymax/fail2ban:1.1.0
+    restart: unless-stopped
     network_mode: host
     cap_add:
       - NET_ADMIN
@@ -223,27 +218,14 @@ services:
       - /var/log/caddy/public:/var/log/caddy/public:ro
     env_file:
       - ./fail2ban.env
-    restart: unless-stopped
   goaccess-public:
-    image: xavierh/goaccess-for-nginxproxymanager:latest
     container_name: goaccess-public
+    image: xavierh/goaccess-for-nginxproxymanager:latest
     restart: unless-stopped
-    environment:
-      - TZ=${TZ}
-      - SKIP_ARCHIVED_LOGS=False
-      - DEBUG=False
-      - LOG_TYPE=CADDY_V1
-      - HTML_REFRESH=5
-      - KEEP_LAST=30
-      - PROCESSING_THREADS=1
+    networks:
+      - proxy-net
     volumes:
       - /var/log/caddy/public:/opt/log:ro
-    networks:
-      - proxy-net
-  goaccess-internal:
-    image: xavierh/goaccess-for-nginxproxymanager:latest
-    container_name: goaccess-internal
-    restart: unless-stopped
     environment:
       - TZ=${TZ}
       - SKIP_ARCHIVED_LOGS=False
@@ -252,54 +234,52 @@ services:
       - HTML_REFRESH=5
       - KEEP_LAST=30
       - PROCESSING_THREADS=1
+  goaccess-internal:
+    container_name: goaccess-internal
+    image: xavierh/goaccess-for-nginxproxymanager:latest
+    restart: unless-stopped
+    networks:
+      - proxy-net
     volumes:
       - /var/log/caddy/internal:/opt/log:ro
-    networks:
-      - proxy-net
-  dockerproxy:
-    image: ghcr.io/tecnativa/docker-socket-proxy:latest
-    container_name: dockerproxy
     environment:
-      - CONTAINERS=1 # Allow access to viewing containers
-      - SERVICES=1 # Allow access to viewing services (necessary when using Docker Swarm)
-      - TASKS=1 # Allow access to viewing tasks (necessary when using Docker Swarm)
-      - POST=0 # Disallow any POST operations (effectively read-only)
-    ports:
-      - "127.0.0.1:2375:2375"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - TZ=${TZ}
+      - SKIP_ARCHIVED_LOGS=False
+      - DEBUG=False
+      - LOG_TYPE=CADDY_V1
+      - HTML_REFRESH=5
+      - KEEP_LAST=30
+      - PROCESSING_THREADS=1
+  homepage:
+    container_name: homepage
+    image: ghcr.io/gethomepage/homepage:latest
+    restart: unless-stopped
     networks:
       - proxy-net
-    restart: unless-stopped
-  homepage:
-    image: ghcr.io/gethomepage/homepage:latest
-    container_name: homepage
-    restart: unless-stopped
     ports:
       - "3000:3000"
-    env_file:
-      - .env
     volumes:
       - ${APPS_BASE_PATH}/homepage:/app/config
-    networks:
-      - proxy-net
     environment:
       - HOMEPAGE_ALLOWED_HOSTS=192.168.100.13:3000,homepage.home.arpa
       - PUID=${PUID}
       - PGID=${PGID}
+    env_file:
+      - .env
   beszel:
-    image: henrygd/beszel:latest
     container_name: beszel
+    image: henrygd/beszel:latest
     restart: unless-stopped
+    networks:
+      - proxy-net
     ports:
       - "8090:8090"
     volumes:
       - ${APPS_BASE_PATH}/beszel_data:/beszel_data
       - ${APPS_BASE_PATH}/beszel_socket:/beszel_socket
-    networks:
-      - proxy-net
     environment:
       - APP_URL=${HOMEPAGE_VAR_BESZEL_URL}
+
 networks:
   proxy-net:
     external: true
