@@ -9,6 +9,7 @@ STACKS=(
   "authentik"
   "vaultwarden"
   "homelab"
+  "reverse-proxy"
 )
 
 EXCLUDE_PATTERNS=(

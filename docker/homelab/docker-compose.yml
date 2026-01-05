@@ -210,15 +210,25 @@ services:
   # ------------------------
   # Misc
   # ------------------------
+  fail2ban:
+    image: crazymax/fail2ban:1.1.0
+    container_name: fail2ban
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    volumes:
+      - ${APPS_BASE_PATH}/fail2ban:/data
+      - /var/log/auth.log:/var/log/auth.log:ro
+      - /var/log/caddy/public:/var/log/caddy/public:ro
+    env_file:
+      - ./fail2ban.env
+    restart: unless-stopped
   goaccess-public:
     image: xavierh/goaccess-for-nginxproxymanager:latest
     container_name: goaccess-public
     restart: unless-stopped
-    ports:
-      - "7880:7880"
     environment:
-      - PUID=${PUID_GOACCESS}
-      - PGID=${PGID_GOACCESS}
       - TZ=${TZ}
       - SKIP_ARCHIVED_LOGS=False
       - DEBUG=False
@@ -234,11 +244,7 @@ services:
     image: xavierh/goaccess-for-nginxproxymanager:latest
     container_name: goaccess-internal
     restart: unless-stopped
-    ports:
-      - "7881:7880"
     environment:
-      - PUID=${PUID_GOACCESS}
-      - PGID=${PGID_GOACCESS}
       - TZ=${TZ}
       - SKIP_ARCHIVED_LOGS=False
       - DEBUG=False

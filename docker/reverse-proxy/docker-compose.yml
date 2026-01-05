@@ -1,0 +1,26 @@
+services:
+  caddy:
+    build: .
+    container_name: caddy
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./conf:/etc/caddy
+      - ./site:/srv
+      - /var/log/caddy:/logs
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - proxy-net
+    environment:
+      - PORKBUN_API_KEY=${PORKBUN_API_KEY}
+      - PORKBUN_API_SECRET_KEY=${PORKBUN_API_SECRET_KEY}
+    restart: unless-stopped
+networks:
+  proxy-net:
+    external: true
+volumes:
+  caddy_data:
+  caddy_config:

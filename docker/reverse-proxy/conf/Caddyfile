@@ -1,17 +1,15 @@
 # Global logging
 {
   log {
-    output file /var/log/caddy/global.log
+    output file /logs/global.log
     format json
   }
-
-  admin off
 }
 
 # Logging template
 (log) {
   log {
-    output file /var/log/caddy/public/access.log
+    output file /logs/public/access.log
     format json
    }
 }
@@ -21,7 +19,7 @@
   tls {
     dns porkbun {
       api_key {$PORKBUN_API_KEY}
-      api_secret_key {$PORKBUN_API_SECRET}
+      api_secret_key {$PORKBUN_API_SECRET_KEY}
     }
   }
 }
@@ -61,22 +59,24 @@
 # 192.168.100.0/24 - LAN devices
 # 10.224.174.0/24 - WireGuard VPN
 # 127.0.0.1/32 - Localhost
+# 172.17.0.0/16 - Docker default network
+# 172.21.0.0/16 - Docker proxy-net network
 
 # Allowed IP's
 (allowed_ip) {
-  remote_ip 192.168.100.0/24 10.224.174.0/24 127.0.0.1/32
+  remote_ip 192.168.100.0/24 10.224.174.0/24 127.0.0.1/32 172.17.0.0/16 172.21.0.0/16
 }
 
 # Allowed IP's Local only
 (allowed_ip_local_only) {
-  remote_ip 192.168.100.0/24 10.224.174.0/24 127.0.0.1/32
+  remote_ip 192.168.100.0/24 10.224.174.0/24 127.0.0.1/32 172.17.0.0/16 172.21.0.0/16
 }
 
 # Authenticate with Аuthentik forward proxy auth
 (authenticate) {
-  reverse_proxy /outpost.goauthentik.io/* 192.168.100.13:9000
+  reverse_proxy /outpost.goauthentik.io/* authentik-server:9000
 
-  forward_auth 192.168.100.13:9000 {
+  forward_auth authentik-server:9000 {
     uri /outpost.goauthentik.io/auth/caddy
     copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Entitlements X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version
     trusted_proxies private_ranges
@@ -88,7 +88,7 @@
   import encoding
 
   log {
-    output file /var/log/caddy/internal/access.log
+    output file /logs/internal/access.log
     format json
   }
 }
@@ -145,7 +145,7 @@
     import allowed_ip
   }
   handle @jellyseerr {
-    reverse_proxy 192.168.100.13:5055 {
+    reverse_proxy jellyseerr:5055 {
       import real_ip_headers
     }
   }
@@ -155,7 +155,7 @@
     import allowed_ip
   }
   handle @audiobookshelf {
-    reverse_proxy 192.168.100.13:13378 {
+    reverse_proxy audiobookshelf:80 {
       import real_ip_headers
     }
   }
@@ -165,7 +165,7 @@
     import allowed_ip
   }
   handle @authentik {
-    reverse_proxy 192.168.100.13:9000 {
+    reverse_proxy authentik-server:9000 {
       import real_ip_headers
     }
   }
@@ -175,7 +175,7 @@
     import allowed_ip_local_only
   }
   handle @vaultwarden {
-    reverse_proxy 127.0.0.1:7000 {
+    reverse_proxy vaultwarden:80 {
       import real_ip_headers
     }
   }
@@ -189,7 +189,7 @@
       max_size 10MB
     }
 
-    reverse_proxy 127.0.0.1:8090 {
+    reverse_proxy beszel:8090 {
       transport http {
         read_timeout 360s
       }
@@ -228,12 +228,12 @@ http://notifiarr.home.arpa {
 
 http://autobrr.home.arpa {
   import common_internal_http
-  import deny_if_not_local 192.168.100.13:7474
+  import deny_if_not_local autobrr:7474
 }
 
 http://qui.home.arpa {
   import common_internal_http
-  import deny_if_not_local 192.168.100.13:7476
+  import deny_if_not_local qui:7476
 }
 
 http://transmission.home.arpa {
@@ -243,17 +243,17 @@ http://transmission.home.arpa {
 
 http://goaccess-public.home.arpa {
   import common_internal_http
-  import deny_if_not_local_auth 192.168.100.13:7880
+  import deny_if_not_local_auth goaccess-public:7880
 }
 
 http://goaccess-internal.home.arpa {
   import common_internal_http
-  import deny_if_not_local_auth 192.168.100.13:7881
+  import deny_if_not_local_auth goaccess-internal:7880
 }
 
 http://homepage.home.arpa {
   import common_internal_http
-  import deny_if_not_local_auth 192.168.100.13:3000
+  import deny_if_not_local_auth homepage:3000
 }
 
 http://pihole.home.arpa {
