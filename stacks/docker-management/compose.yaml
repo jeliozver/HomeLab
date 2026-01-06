@@ -44,7 +44,6 @@ services:
       - proxy-net
     ports:
       - "9443:9443"
-      - "8000:8000"
     volumes:
       - portainer_data:/data
     command: -H tcp://dockerproxy:2375

@@ -114,7 +114,7 @@
         widget:
           type: portainer
           url: "{{HOMEPAGE_VAR_PORTAINER_URL}}"
-          env: 6
+          env: 11
           kubernetes: false
           key: "{{HOMEPAGE_VAR_PORTAINER_API_KEY}}"
     - PiHole:
