@@ -265,6 +265,11 @@ http://cross-seed.home.arpa {
   import deny_if_not_local 192.168.100.3:2468
 }
 
+http://dozzle.home.arpa {
+  import common_internal_http
+  import deny_if_not_local_auth dozzle:8080
+}
+
 http://portainer.home.arpa {
   import common_internal_http
 

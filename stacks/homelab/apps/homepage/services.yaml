@@ -157,6 +157,12 @@
         server: raspberry-docker
         container: vaultwarden
 - Monitoring:
+    - Dozzle:
+        icon: dozzle.png
+        href: "{{HOMEPAGE_VAR_DOZZLE_URL}}"
+        description: Docker log viewer
+        server: raspberry-docker
+        container: dozzle
     - Beszel:
         icon: beszel.png
         href: "{{HOMEPAGE_VAR_BESZEL_URL}}"
