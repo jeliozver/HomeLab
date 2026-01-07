@@ -47,6 +47,8 @@ services:
     volumes:
       - portainer_data:/data
     command: -H tcp://dockerproxy:2375
+    security_opt:
+      - no-new-privileges:true
   dozzle:
     container_name: dozzle
     image: amir20/dozzle:latest
@@ -63,6 +65,8 @@ services:
       - DOZZLE_AUTH_HEADER_NAME=X-authentik-name
       - DOZZLE_AUTH_HEADER_FILTER=X-authentik-group
       - DOZZLE_AUTH_HEADER_ROLES=X-authentik-roles
+    security_opt:
+      - no-new-privileges:true
 
 networks:
   proxy-net:
