@@ -38,10 +38,10 @@ layout:
   Auth:
     icon: mdi-shield-lock-#FFFFFF
     header: true
-    style: column
+    style: row
     columns: 2
   Monitoring:
     icon: mdi-monitor-eye-#FFFFFF
     header: true
-    style: column
-    columns: 3
+    style: row
+    columns: 4
