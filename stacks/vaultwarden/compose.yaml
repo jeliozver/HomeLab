@@ -1,9 +1,12 @@
 services:
   vaultwarden:
-    image: vaultwarden/server:latest
     container_name: vaultwarden
-    user: "${PUID}:${PGID}"
+    image: vaultwarden/server:latest
     restart: unless-stopped
+    networks:
+      - proxy-net
+    volumes:
+      - ./vw-data/:/data/
     environment:
       - DOMAIN=${VAULTWARDEN_DOMAN}
       - SIGNUPS_ALLOWED=false
@@ -15,10 +18,8 @@ services:
       - SSO_AUTHORITY=${SSO_AUTHORITY}
       - SSO_CLIENT_ID=${SSO_CLIENT_ID}
       - SSO_CLIENT_SECRET=${SSO_CLIENT_SECRET}
-    volumes:
-      - ./vw-data/:/data/
-    networks:
-      - proxy-net
+    user: "${PUID}:${PGID}"
+
 networks:
   proxy-net:
     external: true

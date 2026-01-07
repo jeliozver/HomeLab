@@ -59,17 +59,16 @@
 # 192.168.100.0/24 - LAN devices
 # 10.224.174.0/24 - WireGuard VPN
 # 127.0.0.1/32 - Localhost
-# 172.17.0.0/16 - Docker default network
 # 172.21.0.0/16 - Docker proxy-net network
 
 # Allowed IP's
 (allowed_ip) {
-  remote_ip 192.168.100.0/24 10.224.174.0/24 127.0.0.1/32 172.17.0.0/16 172.21.0.0/16
+  remote_ip 192.168.100.0/24 10.224.174.0/24 127.0.0.1/32 172.21.0.0/16
 }
 
 # Allowed IP's Local only
 (allowed_ip_local_only) {
-  remote_ip 192.168.100.0/24 10.224.174.0/24 127.0.0.1/32 172.17.0.0/16 172.21.0.0/16
+  remote_ip 192.168.100.0/24 10.224.174.0/24 127.0.0.1/32 172.21.0.0/16
 }
 
 # Authenticate with Аuthentik forward proxy auth
