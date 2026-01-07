@@ -14,6 +14,7 @@ STACKS=(
   "vaultwarden"
   "homelab"
   "reverse-proxy"
+  "docker-management"
 )
 EXCLUDE_PATTERNS=(
   "stacks/homelab/data/*"
