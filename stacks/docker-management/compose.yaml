@@ -47,8 +47,6 @@ services:
     volumes:
       - portainer_data:/data
     command: -H tcp://dockerproxy:2375
-    security_opt:
-      - no-new-privileges:true
 
 networks:
   proxy-net:
