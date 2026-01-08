@@ -1,6 +1,6 @@
 ---
 
-- Starr Apps:
+- "*arr":
     - Sonarr:
         icon: sonarr.png
         href: "{{HOMEPAGE_VAR_SONARR_URL}}"
@@ -35,7 +35,7 @@
           type: bazarr
           url: "{{HOMEPAGE_VAR_BAZARR_URL}}"
           key: "{{HOMEPAGE_VAR_BAZARR_API_KEY}}"
-- Media Apps:
+- Media:
     - Jellyfin:
         icon: jellyfin.png
         href: "{{HOMEPAGE_VAR_JELLYFIN_URL}}"

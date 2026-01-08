@@ -1,14 +1,5 @@
 ---
 
-- resources:
-    cpu: true
-    memory: true
-    disk: /
-    cputemp: true
-    uptime: false
-    network: false
-    refresh: 30000
-
 - search:
     provider: duckduckgo
     focus: true

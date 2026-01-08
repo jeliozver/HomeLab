@@ -3,6 +3,7 @@
 title: Jeliozver Homepage
 theme: dark
 color: slate
+headerStyle: clean
 useEqualHeights: true
 fullWidth: false
 statusStyle: "dot"
@@ -15,12 +16,12 @@ background:
   opacity: 50
 
 layout:
-  Starr Apps:
+  "*arr":
     icon: servarr.png
     header: true
     style: row
     columns: 4
-  Media Apps:
+  Media:
     icon: mdi-play-network-#FFFFFF
     header: true
     style: row
