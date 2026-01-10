@@ -146,8 +146,7 @@ services:
       - "5454:5454"
     volumes:
       - ${APPS_BASE_PATH}/notifiarr/config:/config
-      - /var/run/utmp:/var/run/utmp:ro
-      - /etc/machine-id:/etc/machine-id
+      - /etc/machine-id:/etc/machine-id:ro
   # ------------------------
   # Media Server
   # ------------------------
@@ -246,13 +245,12 @@ services:
       - "3000:3000"
     volumes:
       - ${APPS_BASE_PATH}/homepage:/app/config
-      #- ${APPS_BASE_PATH}/homepage/images:/app/public/images
     environment:
       - HOMEPAGE_ALLOWED_HOSTS=192.168.100.13:3000,homepage.home.arpa
       - PUID=${PUID}
       - PGID=${PGID}
     env_file:
-      - .env
+      - ./homepage.env
   beszel:
     container_name: beszel
     image: henrygd/beszel:latest
@@ -265,7 +263,7 @@ services:
       - ${APPS_BASE_PATH}/beszel_data:/beszel_data
       - ${APPS_BASE_PATH}/beszel_socket:/beszel_socket
     environment:
-      - APP_URL=${HOMEPAGE_VAR_BESZEL_URL}
+      - APP_URL=https://beszel.jeliozver.com
 
 networks:
   proxy-net:
