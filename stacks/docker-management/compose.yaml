@@ -67,6 +67,31 @@ services:
       - DOZZLE_AUTH_HEADER_ROLES=X-authentik-roles
     security_opt:
       - no-new-privileges:true
+  diun:
+    container_name: diun
+    image: crazymax/diun:latest
+    restart: unless-stopped
+    depends_on:
+      - dockerproxy
+    networks:
+      - proxy-net
+    volumes:
+      - ./data:/data
+    environment:
+      - TZ=${TZ}
+      - DIUN_WATCH_WORKERS=20
+      - DIUN_WATCH_SCHEDULE=0 */6 * * *
+      - DIUN_WATCH_JITTER=30s
+      - DIUN_PROVIDERS_DOCKER=true
+      - DIUN_PROVIDERS_DOCKER_WATCHBYDEFAULT=true
+      - DIUN_PROVIDERS_DOCKER_ENDPOINT=tcp://dockerproxy:2375
+      - DIUN_NOTIF_DISCORD_WEBHOOKURL=${DIUN_NOTIF_DISCORD_WEBHOOKURL}
+      - DIUN_NOTIF_DISCORD_RENDEREMBEDS=true
+      - DIUN_NOTIF_DISCORD_RENDERFIELDS=true
+      - DIUN_NOTIF_DISCORD_TIMEOUT=10s
+    labels:
+      - diun.enable=true
+    command: serve
 
 networks:
   proxy-net:

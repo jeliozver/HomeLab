@@ -117,6 +117,12 @@
           env: 11
           kubernetes: false
           key: "{{HOMEPAGE_VAR_PORTAINER_API_KEY}}"
+    - Diun:
+        icon: diun.png
+        href: https://crazymax.dev/diun
+        description: Docker Image Update Notifier
+        server: raspberry-docker
+        container: diun
     - Dozzle:
         icon: dozzle.png
         href: "{{HOMEPAGE_VAR_DOZZLE_URL}}"
@@ -241,6 +247,10 @@
         icon: portainer-alt.png
         href: https://docs.portainer.io
         description: "Portainer Docs"
+    - "Diun Docs":
+        icon: diun.png
+        href: https://crazymax.dev/diun
+        description: "Diun Docs"
     - "Dozzle Docs":
         icon: dozzle.png
         href: https://dozzle.dev/guide/what-is-dozzle
