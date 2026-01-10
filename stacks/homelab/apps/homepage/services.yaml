@@ -104,7 +104,7 @@
           username: "{{HOMEPAGE_VAR_TRANSMISSION_USERNAME}}"
           password: "{{HOMEPAGE_VAR_TRANSMISSION_PASS}}"
           rpcUrl: /transmission/
-- Networking:
+- Docker:
     - Portainer:
         icon: portainer-alt.png
         href: "{{HOMEPAGE_VAR_PORTAINER_URL}}"
@@ -117,6 +117,13 @@
           env: 11
           kubernetes: false
           key: "{{HOMEPAGE_VAR_PORTAINER_API_KEY}}"
+    - Dozzle:
+        icon: dozzle.png
+        href: "{{HOMEPAGE_VAR_DOZZLE_URL}}"
+        description: Docker log viewer
+        server: raspberry-docker
+        container: dozzle
+- Networking:
     - PiHole:
         icon: pi-hole.png
         href: "{{HOMEPAGE_VAR_PIHOLE_WEB_URL}}"
@@ -126,6 +133,12 @@
           url: "{{HOMEPAGE_VAR_PIHOLE_URL}}"
           version: 6
           key: "{{HOMEPAGE_VAR_PIHOLE_API_KEY}}"
+    - Caddy:
+        icon: caddy
+        href: https://caddyserver.com
+        description: Reverse Proxy
+        server: raspberry-docker
+        container: caddy
     - GoAccessPublic:
         icon: goaccess.png
         href: "{{HOMEPAGE_VAR_GOACCESS_PUBLIC_URL}}"
@@ -151,12 +164,6 @@
         server: raspberry-docker
         container: vaultwarden
 - Monitoring:
-    - Dozzle:
-        icon: dozzle.png
-        href: "{{HOMEPAGE_VAR_DOZZLE_URL}}"
-        description: Docker log viewer
-        server: raspberry-docker
-        container: dozzle
     - Beszel:
         icon: beszel.png
         href: "{{HOMEPAGE_VAR_BESZEL_URL}}"
@@ -171,3 +178,99 @@
         icon: notifiarr.png
         href: "{{HOMEPAGE_VAR_NOTIFIARR_CLIENT_URL}}"
         description: Notifiarr Client
+- Homelab-1:
+    - Homepage:
+        icon: homepage.png
+        href: https://gethomepage.dev
+        description: "Homepage Docs"
+    - "Jellyfin Docs":
+        icon: jellyfin.png
+        href: https://jellyfin.org/docs
+        description: "Jellyfin Docs"
+    - "Jellyseerr Docs":
+        icon: jellyseerr.png
+        href: https://docs.seerr.dev
+        description: "Jellyseerr Docs"
+    - "Audiobookshelf Docs":
+        icon: audiobookshelf.png
+        href: https://www.audiobookshelf.org/docs
+        description: "Audiobookshelf Docs"
+    - "Autobrr Docs":
+        icon: autobrr.png
+        href: https://autobrr.com/introduction
+        description: "Autobrr Docs"
+    - "Qui Docs":
+        icon: qui.png
+        href: https://getqui.com/docs/intro
+        description: "Qui Docs"
+    - "Cross-Seed Docs":
+        icon: cross-seed.png
+        href: https://www.cross-seed.org/docs/basics/getting-started
+        description: "Cross-Seed Docs"
+- Homelab-2:
+    - "Radarr Docs":
+        icon: radarr.png
+        href: https://wiki.servarr.com/radarr
+        description: "Radarr Docs"
+    - "Sonarr Docs":
+        icon: sonarr.png
+        href: https://wiki.servarr.com/sonarr
+        description: "Sonarr Docs"
+    - "Prowlarr Docs":
+        icon: prowlarr.png
+        href: https://wiki.servarr.com/prowlarr
+        description: "Prowlarr Docs"
+    - "Bazarr Docs":
+        icon: bazarr.png
+        href: https://wiki.bazarr.media
+        description: "Bazarr Docs"
+    - "Notifiarr Docs":
+        icon: notifiarr.png
+        href: https://notifiarr.wiki
+        description: "Notifiarr Docs"
+    - "Authentik Docs":
+        icon: authentik.png
+        href: https://docs.goauthentik.io
+        description: "Authentik Docs"
+    - "Vaultwarden Docs":
+        icon: vaultwarden.png
+        href: https://github.com/dani-garcia/vaultwarden/wiki
+        description: "Vaultwarden Docs"
+- Homelab-3:
+    - "Portainer Docs":
+        icon: portainer-alt.png
+        href: https://docs.portainer.io
+        description: "Portainer Docs"
+    - "Dozzle Docs":
+        icon: dozzle.png
+        href: https://dozzle.dev/guide/what-is-dozzle
+        description: "Dozzle Docs"
+    - "Beszel Docs":
+        icon: beszel.png
+        href: https://beszel.dev/guide/what-is-beszel
+        description: "Beszel Docs"
+    - "Caddy Docs":
+        icon: caddy.png
+        href: https://caddyserver.com/docs
+        description: "Caddy Docs"
+    - "PiHole Docs":
+        icon: pi-hole.png
+        href: https://docs.pi-hole.net
+        description: "Pi-Hole Docs"
+- Homelab-4:
+    - "Selfh.st":
+        icon: selfh-st.png
+        href: https://selfh.st
+        description: "Self Host Apps Info"
+    - "XDA-Devs":
+        icon: si-xdadevelopers
+        href: https://www.xda-developers.com/
+        description: "Hardware & Self Host"
+    - "Trash Guides":
+        icon: https://trash-guides.info/img/logo.png
+        href: https://trash-guides.info
+        description: "Guides that aren't trash"
+    - Kodi:
+        icon: kodi.png
+        href: https://kodi.tv/download/android
+        description: "Open Source Home Theater Software"

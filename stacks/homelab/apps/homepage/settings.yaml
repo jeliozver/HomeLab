@@ -16,33 +16,64 @@ background:
   opacity: 50
 
 layout:
+  Bookmarks:
+    header: false
+    style: row
+    columns: 5
   "*arr":
+    tab: Downloads
     icon: servarr.png
     header: true
     style: row
     columns: 4
   Media:
+    tab: Downloads
     icon: mdi-play-network-#FFFFFF
     header: true
     style: row
     columns: 3
   Torrenting:
+    tab: Downloads
     icon: yarr.png
     header: true
     style: row
     columns: 3
-  Networking:
-    icon: mdi-network-#FFFFFF
-    header: true
-    style: row
-    columns: 3
   Auth:
+    tab: Services
     icon: mdi-shield-lock-#FFFFFF
     header: true
     style: row
     columns: 2
+  Docker:
+    tab: Services
+    icon: docker.png
+    style: row
+    columns: 2
+  Networking:
+    tab: Services
+    icon: mdi-network-#FFFFFF
+    header: true
+    style: row
+    columns: 3
   Monitoring:
+    tab: Services
     icon: mdi-monitor-eye-#FFFFFF
     header: true
     style: row
-    columns: 4
+    columns: 3
+  Homelab-1:
+    tab: Reference
+    header: false
+    style: column
+  Homelab-2:
+    tab: Reference
+    header: false
+    style: column
+  Homelab-3:
+    tab: Reference
+    header: false
+    style: column
+  Homelab-4:
+    tab: Reference
+    header: false
+    style: column

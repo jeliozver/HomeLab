@@ -1,1 +1,27 @@
 ---
+
+- Bookmarks:
+    - Youtube:
+        - icon: youtube.png
+          href: https://www.youtube.com
+          description: ""
+    - Gmail:
+        - icon: gmail.png
+          href: https://mail.google.com
+          description: ""
+    - Github:
+        - icon: github-light.png
+          href: https://github.com/jeliozver?tab=repositories
+          description: ""
+    - Reddit:
+        - icon: reddit.png
+          href: https://reddit.com
+          description: ""
+    - Porkbun:
+        - icon: porkbun.png
+          href: https://porkbun.com
+          description: ""
+    - Flashscore:
+        - icon: https://www.flashscore.com/res/_fs/image/4_favicons/_fs/favicon.ico?v=8
+          href: https://www.flashscore.com
+          description: ""
