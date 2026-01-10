@@ -129,15 +129,9 @@
     - GoAccessPublic:
         icon: goaccess.png
         href: "{{HOMEPAGE_VAR_GOACCESS_PUBLIC_URL}}"
-        description: Web log analyzer public domain
+        description: Web log analyzer
         server: raspberry-docker
         container: goaccess-public
-    - GoAccessInternal:
-        icon: goaccess.png
-        href: "{{HOMEPAGE_VAR_GOACCESS_INTERNAL_URL}}"
-        description: Web log analyzer internal apps
-        server: raspberry-docker
-        container: goaccess-internal
 - Auth:
     - Authentik:
         icon: authentik.png

@@ -1,11 +1,3 @@
-# Global logging
-{
-  log {
-    output file /logs/global.log
-    format json
-  }
-}
-
 # Logging template
 (log) {
   log {
@@ -85,11 +77,6 @@
 # Common internal imports
 (common_internal_http) {
   import encoding
-
-  log {
-    output file /logs/internal/access.log
-    format json
-  }
 }
 
 # Block access if IP ranges are not local
@@ -243,11 +230,6 @@ http://transmission.home.arpa {
 http://goaccess-public.home.arpa {
   import common_internal_http
   import deny_if_not_local_auth goaccess-public:7880
-}
-
-http://goaccess-internal.home.arpa {
-  import common_internal_http
-  import deny_if_not_local_auth goaccess-internal:7880
 }
 
 http://homepage.home.arpa {

@@ -47,6 +47,7 @@ services:
       - "7476:7476"
     volumes:
       - ${APPS_BASE_PATH}/qui/config:/config
+    user: "${PUID}:${PGID}"
   autobrr:
     container_name: autobrr
     image: ghcr.io/autobrr/autobrr:latest
@@ -227,22 +228,6 @@ services:
       - proxy-net
     volumes:
       - /var/log/caddy/public:/opt/log:ro
-    environment:
-      - TZ=${TZ}
-      - SKIP_ARCHIVED_LOGS=False
-      - DEBUG=False
-      - LOG_TYPE=CADDY_V1
-      - HTML_REFRESH=5
-      - KEEP_LAST=30
-      - PROCESSING_THREADS=1
-  goaccess-internal:
-    container_name: goaccess-internal
-    image: xavierh/goaccess-for-nginxproxymanager:latest
-    restart: unless-stopped
-    networks:
-      - proxy-net
-    volumes:
-      - /var/log/caddy/internal:/opt/log:ro
     environment:
       - TZ=${TZ}
       - SKIP_ARCHIVED_LOGS=False
