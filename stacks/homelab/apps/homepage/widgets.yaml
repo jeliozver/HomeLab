@@ -1,0 +1,17 @@
+---
+
+- search:
+    provider: duckduckgo
+    focus: true
+    showSearchSuggestions: true
+    target: _blank
+
+- openmeteo:
+    label: Varna
+    latitude: 43.2167
+    longitude: 27.9167
+    timezone: Europe/Sofia
+    units: metric
+    cache: 5
+    format:
+      maximumFractionDigits: 0

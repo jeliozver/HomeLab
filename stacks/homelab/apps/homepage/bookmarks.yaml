@@ -1,0 +1,35 @@
+---
+
+- Bookmarks:
+    - Youtube:
+        - icon: youtube.png
+          href: https://www.youtube.com
+          description: ""
+    - Gmail:
+        - icon: gmail.png
+          href: https://mail.google.com
+          description: ""
+    - GitHub:
+        - icon: github-light.png
+          href: https://github.com/jeliozver?tab=repositories
+          description: ""
+    - Reddit:
+        - icon: reddit.png
+          href: https://reddit.com
+          description: ""
+    - Porkbun:
+        - icon: porkbun.png
+          href: https://porkbun.com
+          description: ""
+    - Notifiarr Web:
+        - icon: notifiarr.png
+          href: https://notifiarr.com
+          description: ""
+    - RinRu:
+        - icon: https://i.imgur.com/KVIwtfn.png
+          href: https://cs.rin.ru/forum/viewforum.php?f=10
+          description: ""
+    - Flashscore:
+        - icon: https://www.flashscore.com/res/_fs/image/4_favicons/_fs/favicon.ico?v=8
+          href: https://www.flashscore.com
+          description: ""

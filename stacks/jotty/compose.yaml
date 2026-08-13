@@ -1,0 +1,18 @@
+services:
+  jotty:
+    container_name: jotty
+    image: ghcr.io/fccview/jotty:latest
+    restart: unless-stopped
+    networks:
+      - proxy-net
+    volumes:
+      - ./data:/app/data
+      - ./config:/app/config
+      - ./cache:/app/.next/cache
+    env_file:
+      - .env
+    user: "${PUID}:${PGID}"
+
+networks:
+  proxy-net:
+    external: true

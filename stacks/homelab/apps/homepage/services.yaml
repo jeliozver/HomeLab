@@ -1,0 +1,482 @@
+---
+- Col-1:
+    - Audiobookshelf:
+        icon: audiobookshelf.png
+        href: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_URL}}"
+        description: Audiobooks Server
+        server: raspberry-docker
+        container: audiobookshelf
+        widget:
+          type: audiobookshelf
+          url: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_INTERNAL_URL}}"
+          key: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_API_KEY}}"
+    - Jellyfin:
+        icon: jellyfin.png
+        href: "{{HOMEPAGE_VAR_JELLYFIN_URL}}"
+        description: Media Server
+        widget:
+          type: jellyfin
+          url: "{{HOMEPAGE_VAR_JELLYFIN_INTERNAL_URL}}"
+          key: "{{HOMEPAGE_VAR_JELLYFIN_API_KEY}}"
+          enableBlocks: true
+          enableNowPlaying: false
+          enableUser: false
+          enableMediaControl: false
+          showEpisodeNumber: false
+          expandOneStreamToTwoRows: false
+    - Seerr:
+        icon: jellyseerr.png
+        href: "{{HOMEPAGE_VAR_JELLYSEERR_URL}}"
+        description: Media Request Server
+        server: raspberry-docker
+        container: seerr
+        widget:
+          type: jellyseerr
+          url: "{{HOMEPAGE_VAR_JELLYSEERR_INTERNAL_URL}}"
+          key: "{{HOMEPAGE_VAR_JELLYSEERR_API_KEY}}"
+    - Tracearr:
+        icon: tracearr.png
+        href: "{{HOMEPAGE_VAR_TRACEARR_URL}}"
+        description: Real-time monitoring for Jellyfin
+        server: raspberry-docker
+        container: tracearr
+        widget:
+          type: tracearr
+          url: "{{HOMEPAGE_VAR_TRACEARR_URL}}"
+          key: "{{HOMEPAGE_VAR_TRACEARR_API_KEY}}"
+          view: summary
+          enableUser: false
+          showEpisodeNumber: false
+          expandOneStreamToTwoRows: false
+    - Autobrr:
+        icon: autobrr.png
+        href: "{{HOMEPAGE_VAR_AUTOBRR_URL}}"
+        description: Auto Download Tool
+        server: raspberry-docker
+        container: autobrr
+        widget:
+          type: autobrr
+          url: "{{HOMEPAGE_VAR_AUTOBRR_URL}}"
+          key: "{{HOMEPAGE_VAR_AUTOBRR_API_KEY}}"
+    - "cross-seed":
+        icon: cross-seed.png
+        href: "{{HOMEPAGE_VAR_CROSS_SEED_URL}}"
+        description: Cross-seed Automation
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_WEBHOOK_URL}}/cs"
+          method: POST
+          headers:
+            Content-Type: 'application/json'
+          requestBody:
+            username: "{{HOMEPAGE_VAR_CROSS_SEED_USERNAME}}"
+            password: "{{HOMEPAGE_VAR_CROSS_SEED_PASSWORD}}"
+            url: "{{HOMEPAGE_VAR_CROSS_SEED_URL}}"
+          refreshInterval: 300000
+          display: block
+          mappings:
+            - field: healthyIndexers
+              label: Healthy
+              format: number
+            - field: recentMatches
+              label: Recent
+              format: number
+            - field: totalSearchees
+              label: Searchees
+              format: number
+            - field: totalMatches
+              label: Total
+              format: number
+- Col-2:
+    - Sonarr:
+        icon: sonarr.png
+        href: "{{HOMEPAGE_VAR_SONARR_URL}}"
+        description: TV Series Manager
+        widget:
+          type: sonarr
+          url: "{{HOMEPAGE_VAR_SONARR_URL}}"
+          key: "{{HOMEPAGE_VAR_SONARR_API_KEY}}"
+          enableQueue: true
+    - Radarr:
+        icon: radarr.png
+        href: "{{HOMEPAGE_VAR_RADARR_URL}}"
+        description: Movies Manager
+        widget:
+          type: radarr
+          url: "{{HOMEPAGE_VAR_RADARR_URL}}"
+          key: "{{HOMEPAGE_VAR_RADARR_API_KEY}}"
+          enableQueue: true
+    - Prowlarr:
+        icon: prowlarr.png
+        href: "{{HOMEPAGE_VAR_PROWLARR_URL}}"
+        description: Indexers Manager
+        widget:
+          type: prowlarr
+          url: "{{HOMEPAGE_VAR_PROWLARR_URL}}"
+          key: "{{HOMEPAGE_VAR_PROWLARR_API_KEY}}"
+    - Bazarr:
+        icon: bazarr.png
+        href: "{{HOMEPAGE_VAR_BAZARR_URL}}"
+        description: Subtitles Manager
+        widget:
+          type: bazarr
+          url: "{{HOMEPAGE_VAR_BAZARR_URL}}"
+          key: "{{HOMEPAGE_VAR_BAZARR_API_KEY}}"
+    - qBittorrent:
+        icon: qBittorrent.png
+        href: "{{HOMEPAGE_VAR_QBIT_URL}}"
+        description: Web interface for qBittorrent
+        server: raspberry-docker
+        container: qui
+        widget:
+          type: qbittorrent
+          url: "{{HOMEPAGE_VAR_QUI_URL}}"
+          username: username
+          password: password
+          enableLeechProgress: true
+          enableLeechSize: true
+    - Transmission:
+        icon: transmission.png
+        href: "{{HOMEPAGE_VAR_TRANSMISSION_URL}}"
+        description: Transmission Torrent Client
+        widget:
+          type: transmission
+          url: "{{HOMEPAGE_VAR_TRANSMISSION_URL}}"
+          username: "{{HOMEPAGE_VAR_TRANSMISSION_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_TRANSMISSION_PASS}}"
+          rpcUrl: /transmission/
+- Col-3:
+    - Dockhand:
+        icon: dockhand.png
+        href: "{{HOMEPAGE_VAR_DOCKHAND_URL}}"
+        description: Docker Containers Manager
+        server: raspberry-docker
+        container: dockhand
+        widget:
+          type: dockhand
+          url: "{{HOMEPAGE_VAR_DOCKHAND_URL}}"
+          username: "{{HOMEPAGE_VAR_DOCKHAND_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_DOCKHAND_PASSWORD}}"
+          fields: ["running", "stopped", "paused", "stacks"]
+    - Authentik:
+        id: authentik
+        icon: authentik.png
+        href: "{{HOMEPAGE_VAR_AUTHENTIK_URL}}"
+        description: Identity Provider (IdP) for modern SSO
+        server: raspberry-docker
+        container: authentik-server
+        widget:
+          type: authentik
+          url: "{{HOMEPAGE_VAR_AUTHENTIK_INTERNAL_URL}}"
+          key: "{{HOMEPAGE_VAR_AUTHENTIK_API_KEY}}"
+          version: 2
+    - Beszel:
+        icon: beszel.png
+        href: "{{HOMEPAGE_VAR_BESZEL_URL}}"
+        description: Server Monitoring
+        server: raspberry-docker
+        container: beszel
+        widget:
+          type: beszel
+          url: "{{HOMEPAGE_VAR_BESZEL_URL}}"
+          username: "{{HOMEPAGE_VAR_BESZEL_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_BESZEL_PASSWORD}}"
+          version: 2
+    - PiHole:
+        icon: pi-hole.png
+        href: "{{HOMEPAGE_VAR_PIHOLE_WEB_URL}}"
+        description: Network-wide Ad Blocker
+        widget:
+          type: pihole
+          url: "{{HOMEPAGE_VAR_PIHOLE_URL}}"
+          version: 6
+          key: "{{HOMEPAGE_VAR_PIHOLE_API_KEY}}"
+    - WireGuard:
+        icon: wireguard.png
+        href: https://docs.pivpn.io/wireguard
+        description: PiVPN WireGuard
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_WEBHOOK_URL}}/wireGuard"
+          refreshInterval: 300000
+          method: GET
+          display: block
+          mappings:
+            - field: connected
+              label: Connected
+              format: number
+            - field: enabled
+              label: Enabled
+              format: number
+            - field: disabled
+              label: Disabled
+              format: number
+            - field: total
+              label: Total
+              format: number
+    - Col-3-Sub-Col-1:
+      - Termix:
+          icon: termix.png
+          href: "{{HOMEPAGE_VAR_TERMIX_URL}}"
+          description: SSH Server Manager
+          server: raspberry-docker
+          container: termix
+      - Dozzle:
+          icon: dozzle.png
+          href: "{{HOMEPAGE_VAR_DOZZLE_URL}}"
+          description: Docker Log Viewer
+          server: raspberry-docker
+          container: dozzle
+    - Col-3-Sub-Col-2:
+      - Notifiarr Client:
+          icon: notifiarr.png
+          href: "{{HOMEPAGE_VAR_NOTIFIARR_CLIENT_URL}}"
+          description: Notifiarr Client
+          server: raspberry-docker
+          container: notifiarr
+      - Vaultwarden:
+          icon: vaultwarden.png
+          href: "{{HOMEPAGE_VAR_VAULTWARDEN_URL}}"
+          description: Password Manager
+          server: raspberry-docker
+          container: vaultwarden
+- Col-4:
+    - Restic:
+        icon: restic.png
+        href: https://restic.readthedocs.io/en/stable
+        description: "Backup Tool"
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_WEBHOOK_URL}}/restic"
+          refreshInterval: 3600000
+          method: GET
+          display: block
+          mappings:
+            - field: total_snapshots
+              label: Snapshots
+              format: number
+            - field: total_size
+              label: Size
+              format: bytes
+    - Jotty:
+        icon: jotty.png
+        href: "{{HOMEPAGE_VAR_JOTTY_URL}}"
+        description: Notes & Checklists
+        server: raspberry-docker
+        container: jotty
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_JOTTY_URL}}/api/summary"
+          refreshInterval: 3600000
+          method: GET
+          headers:
+            X-Api-Key: "{{HOMEPAGE_VAR_JOTTY_API_KEY}}"
+          display: block
+          mappings:
+            - field: summary.checklists.total
+              label: Checklists
+              format: number
+            - field: summary.notes.total
+              label: Notes
+              format: number
+    - WatchYourLan:
+        icon: watchyourlan
+        href: "{{HOMEPAGE_VAR_WATCH_YOUR_LAN_URL}}"
+        description: Network IP Scanner
+        server: raspberry-docker
+        container: wyl
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_WEBHOOK_URL}}/wyl"
+          refreshInterval: 300000
+          method: GET
+          display: block
+          mappings:
+            - field: Online
+              label: Online
+              format: number
+            - field: Offline
+              label: Offline
+              format: number
+            - field: Unknown
+              label: Unknown
+              format: number
+            - field: Total
+              label: Total
+              format: number
+    - Caddy:
+        icon: caddy
+        href: https://caddyserver.com
+        description: Reverse Proxy
+        server: raspberry-docker
+        container: caddy
+        widget:
+          type: caddy
+          url: "{{HOMEPAGE_VAR_CADDY_ADMIN_URL}}"
+    - Fail2Ban:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/png/fail2ban.png
+        href: https://github.com/crazy-max/docker-fail2ban
+        description: Fail2ban Docker Image
+        server: raspberry-docker
+        container: fail2ban
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_WEBHOOK_URL}}/fail2ban"
+          refreshInterval: 300000
+          method: GET
+          display: block
+          mappings:
+            - field: total
+              label: Jails
+              format: number
+            - field: failed
+              label: Failed
+              format: number
+            - field: banned
+              label: Banned
+              format: number
+    - GoAccess:
+        icon: goaccess.png
+        href: "{{HOMEPAGE_VAR_GOACCESS_PUBLIC_URL}}"
+        description: Web Log Analyzer
+        server: raspberry-docker
+        container: goaccess-public
+        widget:
+          type: customapi
+          url: "{{HOMEPAGE_VAR_WEBHOOK_URL}}/goaccess"
+          refreshInterval: 300000
+          method: GET
+          display: block
+          mappings:
+            - field: bandwidth
+              label: Tx. Amount
+              format: bytes
+            - field: valid_requests
+              label: Valid
+              format: number
+            - field: failed_requests
+              label: Failed
+              format: number
+            - field: total_requests
+              label: Total
+              format: number
+- Docs-1:
+    - Homepage:
+        icon: homepage.png
+        href: https://gethomepage.dev
+        description: "Homepage Docs"
+    - "Jellyfin Docs":
+        icon: jellyfin.png
+        href: https://jellyfin.org/docs
+        description: "Jellyfin Docs"
+    - "Jellyseerr Docs":
+        icon: jellyseerr.png
+        href: https://docs.seerr.dev
+        description: "Jellyseerr Docs"
+    - "Audiobookshelf Docs":
+        icon: audiobookshelf.png
+        href: https://www.audiobookshelf.org/docs
+        description: "Audiobookshelf Docs"
+    - "Autobrr Docs":
+        icon: autobrr.png
+        href: https://autobrr.com/introduction
+        description: "Autobrr Docs"
+    - "Qui Docs":
+        icon: qui.png
+        href: https://getqui.com/docs/intro
+        description: "Qui Docs"
+    - "Cross-Seed Docs":
+        icon: cross-seed.png
+        href: https://www.cross-seed.org/docs/basics/getting-started
+        description: "Cross-Seed Docs"
+    - "Restic Docs":
+        icon: restic.png
+        href: https://restic.readthedocs.io/en/stable
+        description: "Restic Docs"
+- Docs-2:
+    - "Radarr Docs":
+        icon: radarr.png
+        href: https://wiki.servarr.com/radarr
+        description: "Radarr Docs"
+    - "Sonarr Docs":
+        icon: sonarr.png
+        href: https://wiki.servarr.com/sonarr
+        description: "Sonarr Docs"
+    - "Prowlarr Docs":
+        icon: prowlarr.png
+        href: https://wiki.servarr.com/prowlarr
+        description: "Prowlarr Docs"
+    - "Bazarr Docs":
+        icon: bazarr.png
+        href: https://wiki.bazarr.media
+        description: "Bazarr Docs"
+    - "Notifiarr Docs":
+        icon: notifiarr.png
+        href: https://notifiarr.wiki
+        description: "Notifiarr Docs"
+    - "Authentik Docs":
+        icon: authentik.png
+        href: https://docs.goauthentik.io
+        description: "Authentik Docs"
+    - "Vaultwarden Docs":
+        icon: vaultwarden.png
+        href: https://github.com/dani-garcia/vaultwarden/wiki
+        description: "Vaultwarden Docs"
+    - "Jotty Docs":
+        icon: jotty.png
+        href: https://github.com/fccview/jotty/blob/main/howto/DOCKER.md
+        description: "Jotty Docs"
+- Docs-3:
+    - "Dockhand Docks":
+        icon: dockhand.png
+        href: https://dockhand.pro/manual
+        description: "Dockhand Docs"
+    - "Dozzle Docs":
+        icon: dozzle.png
+        href: https://dozzle.dev/guide/what-is-dozzle
+        description: "Dozzle Docs"
+    - "Beszel Docs":
+        icon: beszel.png
+        href: https://beszel.dev/guide/what-is-beszel
+        description: "Beszel Docs"
+    - "WatchYourLAN-Docs":
+        icon: watchyourlan.png
+        href: https://github.com/aceberg/WatchYourLAN
+        description: "WatchYourLAN Docs"
+    - "Fail2Ban Docs":
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/png/fail2ban.png
+        href: https://github.com/fail2ban/fail2ban
+        description: "Fail2Ban Docs"
+    - "Caddy Docs":
+        icon: caddy.png
+        href: https://caddyserver.com/docs
+        description: "Caddy Docs"
+    - "PiHole Docs":
+        icon: pi-hole.png
+        href: https://docs.pi-hole.net
+        description: "Pi-Hole Docs"
+    - "PiVPN Docs":
+        icon: wireguard.png
+        href: https://docs.pivpn.io
+        description: "PiVPN Docs"
+- Docs-4:
+    - "Termix-Docs":
+        icon: termix.png
+        href: https://docs.termix.site
+        description: "Termix Docs"
+    - "Selfh.st":
+        icon: selfh-st.png
+        href: https://selfh.st
+        description: "Self Host Apps Info"
+    - "XDA-Devs":
+        icon: si-xdadevelopers
+        href: https://www.xda-developers.com
+        description: "Hardware & Self Host"
+    - "Trash Guides":
+        icon: https://trash-guides.info/img/logo.png
+        href: https://trash-guides.info
+        description: "Guides that aren't trash"
+    - Kodi:
+        icon: kodi.png
+        href: https://kodi.tv/download/android
+        description: "Open Source Home Theater Software"

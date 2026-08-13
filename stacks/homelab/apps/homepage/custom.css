@@ -1,0 +1,29 @@
+#information-widgets {
+    margin-top: 0;
+}
+
+#tabs {
+    margin-top: 0;
+}
+
+#layout-groups {
+    margin-top: 10px;
+}
+
+#authentik {
+ .service-container :last-child {
+     .uppercase {
+         visibility: hidden;
+         position: relative;
+         font-weight: 600;
+     }
+
+     .uppercase:after {
+         visibility: visible;
+         position: absolute;
+         top: 0;
+         left: 20%;
+         content: "Failed (24H)";
+     }
+ }
+}

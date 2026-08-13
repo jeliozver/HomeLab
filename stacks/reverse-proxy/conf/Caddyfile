@@ -1,0 +1,299 @@
+# Global config
+# Logging template
+(log) {
+  log {
+    output file /logs/public/access.log
+    format json
+   }
+}
+
+# TLS Config Porkbun
+(tls_porkbun) {
+  tls {
+    dns porkbun {
+      api_key {$PORKBUN_API_KEY}
+      api_secret_key {$PORKBUN_API_SECRET_KEY}
+    }
+  }
+}
+
+# TLS Inernal
+(tls_internal) {
+  tls internal
+}
+
+# TLS Config
+(tls) {
+  tls {
+    protocols tls1.2 tls1.3
+    ciphers TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256 TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+  }
+}
+
+# Common headers
+(headers) {
+  header {
+    -Server
+    Strict-Transport-Security "max-age=63072000"
+    X-Robots-Tag "noindex, nofollow, nosnippet, noarchive"
+  }
+}
+
+# Common encoding
+(encoding) {
+  encode zstd gzip
+}
+
+# Forward real IP headers
+(real_ip_headers) {
+  header_up X-Real-IP {remote_host}
+}
+
+# 192.168.100.0/24 - LAN devices
+# 10.224.174.0/24 - WireGuard VPN
+# 127.0.0.1/32 - Localhost
+# 172.21.0.0/16 - Docker proxy-net network
+
+# Allowed IP's
+(allowed_ip) {
+  remote_ip 192.168.100.0/24 10.224.174.0/24 127.0.0.1/32 172.21.0.0/16
+}
+
+# Allowed IP's Local only
+(allowed_ip_local_only) {
+  remote_ip 192.168.100.0/24 10.224.174.0/24 127.0.0.1/32 172.21.0.0/16
+}
+
+# Authenticate with Аuthentik forward proxy auth
+(authenticate) {
+  reverse_proxy /outpost.goauthentik.io/* authentik-server:9000
+
+  forward_auth authentik-server:9000 {
+    uri /outpost.goauthentik.io/auth/caddy
+    copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Entitlements X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version
+    trusted_proxies private_ranges
+  }
+}
+
+# Common internal imports
+(common_internal_http) {
+  import encoding
+}
+
+# Block access if IP ranges are not local
+(deny_if_not_local) {
+  @allowed {
+    import allowed_ip_local_only
+  }
+
+  handle @allowed {
+    reverse_proxy {args[0]}
+  }
+
+  handle {
+    respond "403 Forbidden" 403
+  }
+}
+
+(deny_if_not_local_auth) {
+  @allowed {
+   import allowed_ip_local_only
+  }
+
+  handle @allowed {
+   import authenticate
+
+   reverse_proxy {args[0]}
+  }
+
+  handle {
+   respond "403 Forbidden" 403
+  }
+}
+
+*.example.com {
+  import tls_porkbun
+  import headers
+  import encoding
+  import log
+
+  @jellyfin {
+    host jellyfin.example.com
+    import allowed_ip
+  }
+  handle @jellyfin {
+    reverse_proxy 192.168.100.3:8096 {
+      import real_ip_headers
+    }
+  }
+
+  @jellyseerr {
+    host jellyseerr.example.com
+    import allowed_ip
+  }
+  handle @jellyseerr {
+    reverse_proxy seerr:5055 {
+      import real_ip_headers
+    }
+  }
+
+  @audiobookshelf {
+    host abs.example.com
+    import allowed_ip
+  }
+  handle @audiobookshelf {
+    reverse_proxy audiobookshelf:80 {
+      import real_ip_headers
+    }
+  }
+
+  @authentik {
+    host auth.example.com
+    import allowed_ip
+  }
+  handle @authentik {
+    reverse_proxy authentik-server:9000 {
+      import real_ip_headers
+    }
+  }
+
+  @vaultwarden {
+    host vaultwarden.example.com
+    import allowed_ip_local_only
+  }
+  handle @vaultwarden {
+    reverse_proxy vaultwarden:80 {
+      import real_ip_headers
+    }
+  }
+
+  @beszel {
+    host beszel.example.com
+    import allowed_ip_local_only
+  }
+  handle @beszel {
+    request_body {
+      max_size 10MB
+    }
+
+    reverse_proxy beszel:8090 {
+      transport http {
+        read_timeout 360s
+      }
+    }
+  }
+
+  handle {
+    respond "403 Forbidden" 403
+  }
+}
+
+http://sonarr.home.arpa {
+  import common_internal_http
+  import deny_if_not_local 192.168.100.3:8989
+}
+
+http://radarr.home.arpa {
+  import common_internal_http
+  import deny_if_not_local 192.168.100.3:7878
+}
+
+http://prowlarr.home.arpa {
+  import common_internal_http
+  import deny_if_not_local 192.168.100.3:9696
+}
+
+http://bazarr.home.arpa {
+  import common_internal_http
+  import deny_if_not_local 192.168.100.3:6767
+}
+
+http://notifiarr.home.arpa {
+  import common_internal_http
+  import deny_if_not_local notifiarr:5454
+}
+
+http://autobrr.home.arpa {
+  import common_internal_http
+  import deny_if_not_local autobrr:7474
+}
+
+http://qui.home.arpa {
+  import common_internal_http
+  import deny_if_not_local qui:7476
+}
+
+http://transmission.home.arpa {
+  import common_internal_http
+  import deny_if_not_local 192.168.100.3:9092
+}
+
+http://goaccess-public.home.arpa {
+  import common_internal_http
+  import deny_if_not_local_auth goaccess-public:7880
+}
+
+http://homepage.home.arpa {
+  import common_internal_http
+  import deny_if_not_local_auth homepage:3000
+}
+
+http://pihole.home.arpa {
+  import common_internal_http
+  import deny_if_not_local 192.168.100.13:8080
+}
+
+http://cross-seed.home.arpa {
+  import common_internal_http
+  import deny_if_not_local 192.168.100.3:2468
+}
+
+http://dozzle.home.arpa {
+  import common_internal_http
+  import deny_if_not_local_auth dozzle:8080
+}
+
+http://homepage-webhook.home.arpa {
+  import common_internal_http
+  import deny_if_not_local 192.168.100.13:3030
+}
+
+http://watch-your-lan.home.arpa {
+  import common_internal_http
+  import deny_if_not_local_auth 192.168.100.13:8840
+}
+
+http://jotty.home.arpa {
+  import common_internal_http
+  import deny_if_not_local jotty:3000
+}
+
+http://dockhand.home.arpa {
+  import common_internal_http
+  import deny_if_not_local dockhand:3000
+}
+
+http://termix.home.arpa {
+  import common_internal_http
+  import deny_if_not_local termix:8080
+}
+
+http://tracearr.home.arpa {
+  import common_internal_http
+  import deny_if_not_local tracearr:3000
+}
+
+http://uptime-kuma.home.arpa {
+  import common_internal_http
+  import deny_if_not_local uptime-kuma:3001
+}
+
+http://epg.home.arpa {
+  import common_internal_http
+  import deny_if_not_local epg:3000
+}
+
+http://dispatcharr.home.arpa {
+  import common_internal_http
+  import deny_if_not_local 192.168.100.13:9191
+}

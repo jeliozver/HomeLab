@@ -1,0 +1,64 @@
+---
+
+title: Jeliozver Homepage
+theme: dark
+color: slate
+headerStyle: clean
+useEqualHeights: true
+fullWidth: false
+statusStyle: "dot"
+
+background:
+  image: https://images.unsplash.com/photo-1502790671504-542ad42d5189?auto=format&fit=crop&w=2560&q=80
+  blur: sm
+  saturate: 50
+  brightness: 50
+  opacity: 50
+
+layout:
+  Bookmarks:
+    header: false
+    style: row
+    columns: 8
+  Col-1:
+    tab: Services
+    header: false
+    style: column
+  Col-2:
+    tab: Services
+    header: false
+    style: column
+  Col-3:
+    tab: Services
+    header: false
+    style: column
+    Col-3-Sub-Col-1:
+      tab: Services
+      header: false
+      style: row
+      columns: 2
+    Col-3-Sub-Col-2:
+      tab: Services
+      header: false
+      style: row
+      columns: 2
+  Col-4:
+    tab: Services
+    header: false
+    style: column
+  Docs-1:
+    tab: Documentation
+    header: false
+    style: column
+  Docs-2:
+    tab: Documentation
+    header: false
+    style: column
+  Docs-3:
+    tab: Documentation
+    header: false
+    style: column
+  Docs-4:
+    tab: Documentation
+    header: false
+    style: column

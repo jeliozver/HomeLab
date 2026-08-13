@@ -1,0 +1,93 @@
+services:
+  dockerproxy:
+    container_name: dockerproxy
+    image: ghcr.io/tecnativa/docker-socket-proxy:latest
+    restart: unless-stopped
+    networks:
+      - proxy-net
+    ports:
+      - "127.0.0.1:2375:2375"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - INFO=1        # Docker host info (OS, storage driver, limits)
+      - EVENTS=1      # Docker events
+      - VERSION=1     # Docker engine + API version
+      - PING=1        # Health check endpoint
+      - SYSTEM=1      # System info
+
+      - CONTAINERS=1  # List / inspect containers, logs, stats
+      - ALLOW_START=1      # Containers stop
+      - ALLOW_STOP=1      # Containers stop
+      - ALLOW_RESTARTS=1   # Containers stop | restart | kill
+      - IMAGES=1      # List / inspect images
+      - NETWORKS=1    # List / inspect Docker networks
+      - VOLUMES=1     # List / inspect volumes
+
+      - SWARM=0       # Swarm control
+      - NODES=0       # Swarm nodes
+      - SERVICES=0    # Swarm services
+      - TASKS=0       # Swarm task visibility
+
+      - EXEC=1        # Execute commands
+      - POST=1        # POST actions
+      - DELETE=1      # DELETE actions
+      - AUTH=0        # Authentication APIs
+      - SECRETS=0     # Docker secrets access
+    security_opt:
+      - no-new-privileges:true
+  dozzle:
+    container_name: dozzle
+    image: amir20/dozzle:latest
+    restart: unless-stopped
+    depends_on:
+      - dockerproxy
+    networks:
+      - proxy-net
+    environment:
+      - DOZZLE_REMOTE_HOST=tcp://dockerproxy:2375
+      - DOZZLE_AUTH_PROVIDER=forward-proxy
+      - DOZZLE_AUTH_HEADER_USER=X-authentik-username
+      - DOZZLE_AUTH_HEADER_EMAIL=X-authentik-email
+      - DOZZLE_AUTH_HEADER_NAME=X-authentik-name
+      - DOZZLE_AUTH_HEADER_FILTER=X-authentik-group
+      - DOZZLE_AUTH_HEADER_ROLES=X-authentik-roles
+    user: "${PUID}:${PGID}"
+    security_opt:
+      - no-new-privileges:true
+  dockhand-db:
+    container_name: dockhand-db
+    image: docker.io/library/postgres:16-alpine
+    environment:
+      - POSTGRES_USER=dockhand
+      - POSTGRES_PASSWORD=${DOCKHAND_PG_PASS}
+      - POSTGRES_DB=dockhand
+    volumes:
+      - dockhand_db:/var/lib/postgresql/data
+  dockhand:
+    container_name: dockhand
+    image: fnsys/dockhand:latest
+    restart: unless-stopped
+    depends_on:
+      - dockhand-db
+      - dockerproxy
+    networks:
+      - proxy-net
+      - default
+    volumes:
+      - dockhand_data:/app/data
+    environment:
+      - DATABASE_URL=postgres://dockhand:${DOCKHAND_PG_PASS}@dockhand-db:5432/dockhand
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+
+networks:
+  proxy-net:
+    external: true
+
+volumes:
+  dockhand_db:
+    name: dockhand_db
+  dockhand_data:
+    name: dockhand_data

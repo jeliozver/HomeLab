@@ -1,0 +1,19 @@
+services:
+  termix:
+    container_name: termix
+    image: ghcr.io/lukegus/termix:latest
+    restart: unless-stopped
+    networks:
+      - proxy-net
+    volumes:
+      - termix-data:/app/data
+    user: "${PUID}:${PGID}"
+
+networks:
+  proxy-net:
+    external: true
+
+volumes:
+  termix-data:
+    driver: local
+    name: termix-data
