@@ -5,7 +5,7 @@ services:
   # ------------------------
   qbittorrent:
     container_name: qbittorrent
-    image: lscr.io/linuxserver/qbittorrent:5.1.4
+    image: lscr.io/linuxserver/qbittorrent:5.2.3
     restart: unless-stopped
     ports:
       - "5252:5252"
@@ -278,18 +278,6 @@ services:
     environment:
       TZ: TZ=${TZ}
       IFACES: "wlan0 eth0"
-  dashbrr:
-    container_name: dashbrr
-    image: ghcr.io/autobrr/dashbrr:latest
-    restart: unless-stopped
-    networks:
-      - proxy-net
-    volumes:
-      - ${APPS_BASE_PATH}:/data
-    environment:
-      - DASHBRR__DB_TYPE=sqlite
-      - DASHBRR__LISTEN_ADDR=0.0.0.0:8080
-    user: "${PUID}:${PGID}"
   epg:
     container_name: epg
     image: ghcr.io/iptv-org/epg:master
