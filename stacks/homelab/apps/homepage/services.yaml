@@ -48,6 +48,17 @@
           enableUser: false
           showEpisodeNumber: false
           expandOneStreamToTwoRows: false
+    - Dispatcharr:
+        icon: dispatcharr.png
+        href: "{{HOMEPAGE_VAR_DISPATCHARR_URL}}"
+        description: IPTV Manager
+        server: raspberry-docker
+        container: dispatcharr_web
+        widget:
+          type: dispatcharr
+          url: "{{HOMEPAGE_VAR_DISPATCHARR_URL}}"
+          username: "{{HOMEPAGE_VAR_DISPATCHARR_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_DISPATCHARR_PASSWORD}}"
     - Autobrr:
         icon: autobrr.png
         href: "{{HOMEPAGE_VAR_AUTOBRR_URL}}"
@@ -123,7 +134,7 @@
           url: "{{HOMEPAGE_VAR_BAZARR_URL}}"
           key: "{{HOMEPAGE_VAR_BAZARR_API_KEY}}"
     - qBittorrent:
-        icon: qBittorrent.png
+        icon: qbittorrent.png
         href: "{{HOMEPAGE_VAR_QBIT_URL}}"
         description: Web interface for qBittorrent
         server: raspberry-docker
@@ -480,3 +491,7 @@
         icon: kodi.png
         href: https://kodi.tv/download/android
         description: "Open Source Home Theater Software"
+    - "Dispatcharr-Docs":
+        icon: dispatcharr.png
+        href: https://dispatcharr.github.io/Dispatcharr-Docs
+        description: "IPTV Manager"

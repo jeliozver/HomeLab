@@ -95,22 +95,6 @@
   }
 }
 
-(deny_if_not_local_auth) {
-  @allowed {
-   import allowed_ip_local_only
-  }
-
-  handle @allowed {
-   import authenticate
-
-   reverse_proxy {args[0]}
-  }
-
-  handle {
-   respond "403 Forbidden" 403
-  }
-}
-
 *.example.com {
   import tls_porkbun
   import headers
@@ -188,112 +172,201 @@
   }
 }
 
-http://sonarr.home.arpa {
-  import common_internal_http
-  import deny_if_not_local 192.168.100.3:8989
-}
+*.int.example.com {
+  import tls_porkbun
+  import headers
+  import encoding
 
-http://radarr.home.arpa {
-  import common_internal_http
-  import deny_if_not_local 192.168.100.3:7878
+  @sonarr {
+    host sonarr.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @sonarr {
+    reverse_proxy 192.168.100.3:8989
+  }
+
+  @radarr {
+    host radarr.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @radarr {
+    reverse_proxy 192.168.100.3:7878
+  }
+
+  @prowlarr {
+    host prowlarr.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @prowlarr {
+    reverse_proxy 192.168.100.3:9696
+  }
+
+  @bazarr {
+    host bazarr.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @bazarr {
+    reverse_proxy 192.168.100.3:6767
+  }
+
+  @notifiarr {
+    host notifiarr.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @notifiarr {
+    reverse_proxy notifiarr:5454
+  }
+
+  @autobrr {
+    host autobrr.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @autobrr {
+    reverse_proxy autobrr:7474
+  }
+
+  @qui {
+    host qui.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @qui {
+    reverse_proxy qui:7476
+  }
+
+  @transmission {
+    host transmission.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @transmission {
+    reverse_proxy 192.168.100.3:9092
+  }
+
+  @goaccess {
+    host goaccess.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @goaccess {
+    import authenticate
+
+    reverse_proxy goaccess-public:7880
+  }
+
+  @homepage {
+    host homepage.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @homepage {
+    import authenticate
+
+    reverse_proxy homepage:3000
+  }
+
+  @pihole {
+    host pihole.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @pihole {
+    reverse_proxy 192.168.100.13:8080
+  }
+
+  @cross-seed {
+    host cross-seed.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @cross-seed {
+    reverse_proxy 192.168.100.3:2468
+  }
+
+  @dozzle {
+    host dozzle.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @dozzle {
+    import authenticate
+
+    reverse_proxy dozzle:8080
+  }
+
+  @watch-your-lan {
+    host watch-your-lan.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @watch-your-lan {
+    import authenticate
+
+    reverse_proxy 192.168.100.13:8840
+  }
+
+  @jotty {
+    host jotty.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @jotty {
+    reverse_proxy jotty:3000
+  }
+
+  @dockhand {
+    host dockhand.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @dockhand {
+    reverse_proxy dockhand:3000
+  }
+
+  @termix {
+    host termix.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @termix {
+    reverse_proxy termix:8080
+  }
+
+  @tracearr {
+    host tracearr.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @tracearr {
+    reverse_proxy tracearr:3000
+  }
+
+  @uptime-kuma {
+    host uptime-kuma.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @uptime-kuma {
+    reverse_proxy uptime-kuma:3001
+  }
+
+  @epg {
+    host epg.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @epg {
+    reverse_proxy epg:3000
+  }
+
+  @dispatcharr {
+    host dispatcharr.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @dispatcharr {
+    reverse_proxy 192.168.100.13:9191
+  }
+
+  @homepage-webhook {
+    host homepage-webhook.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @homepage-webhook {
+    reverse_proxy 192.168.100.13:3030
+  }
+
+  handle {
+    respond "403 Forbidden" 403
+  }
 }
 
 http://prowlarr.home.arpa {
   import common_internal_http
   import deny_if_not_local 192.168.100.3:9696
-}
-
-http://bazarr.home.arpa {
-  import common_internal_http
-  import deny_if_not_local 192.168.100.3:6767
-}
-
-http://notifiarr.home.arpa {
-  import common_internal_http
-  import deny_if_not_local notifiarr:5454
-}
-
-http://autobrr.home.arpa {
-  import common_internal_http
-  import deny_if_not_local autobrr:7474
-}
-
-http://qui.home.arpa {
-  import common_internal_http
-  import deny_if_not_local qui:7476
-}
-
-http://transmission.home.arpa {
-  import common_internal_http
-  import deny_if_not_local 192.168.100.3:9092
-}
-
-http://goaccess-public.home.arpa {
-  import common_internal_http
-  import deny_if_not_local_auth goaccess-public:7880
-}
-
-http://homepage.home.arpa {
-  import common_internal_http
-  import deny_if_not_local_auth homepage:3000
-}
-
-http://pihole.home.arpa {
-  import common_internal_http
-  import deny_if_not_local 192.168.100.13:8080
-}
-
-http://cross-seed.home.arpa {
-  import common_internal_http
-  import deny_if_not_local 192.168.100.3:2468
-}
-
-http://dozzle.home.arpa {
-  import common_internal_http
-  import deny_if_not_local_auth dozzle:8080
-}
-
-http://homepage-webhook.home.arpa {
-  import common_internal_http
-  import deny_if_not_local 192.168.100.13:3030
-}
-
-http://watch-your-lan.home.arpa {
-  import common_internal_http
-  import deny_if_not_local_auth 192.168.100.13:8840
-}
-
-http://jotty.home.arpa {
-  import common_internal_http
-  import deny_if_not_local jotty:3000
-}
-
-http://dockhand.home.arpa {
-  import common_internal_http
-  import deny_if_not_local dockhand:3000
-}
-
-http://termix.home.arpa {
-  import common_internal_http
-  import deny_if_not_local termix:8080
-}
-
-http://tracearr.home.arpa {
-  import common_internal_http
-  import deny_if_not_local tracearr:3000
-}
-
-http://uptime-kuma.home.arpa {
-  import common_internal_http
-  import deny_if_not_local uptime-kuma:3001
-}
-
-http://epg.home.arpa {
-  import common_internal_http
-  import deny_if_not_local epg:3000
-}
-
-http://dispatcharr.home.arpa {
-  import common_internal_http
-  import deny_if_not_local 192.168.100.13:9191
 }

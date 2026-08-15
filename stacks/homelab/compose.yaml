@@ -249,7 +249,7 @@ services:
     volumes:
       - ${APPS_BASE_PATH}/homepage:/app/config
     environment:
-      - HOMEPAGE_ALLOWED_HOSTS=homepage.home.arpa
+      - HOMEPAGE_ALLOWED_HOSTS=homepage.int.example.com
       - PUID=${PUID}
       - PGID=${PGID}
     env_file:
