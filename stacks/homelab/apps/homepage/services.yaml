@@ -166,8 +166,7 @@
         widget:
           type: dockhand
           url: "{{HOMEPAGE_VAR_DOCKHAND_URL}}"
-          username: "{{HOMEPAGE_VAR_DOCKHAND_USERNAME}}"
-          password: "{{HOMEPAGE_VAR_DOCKHAND_PASSWORD}}"
+          key: "{{HOMEPAGE_VAR_DOCKHAND_API_KEY}}"
           fields: ["running", "stopped", "paused", "stacks"]
     - Authentik:
         id: authentik
