@@ -75,26 +75,6 @@
   }
 }
 
-# Common internal imports
-(common_internal_http) {
-  import encoding
-}
-
-# Block access if IP ranges are not local
-(deny_if_not_local) {
-  @allowed {
-    import allowed_ip_local_only
-  }
-
-  handle @allowed {
-    reverse_proxy {args[0]}
-  }
-
-  handle {
-    respond "403 Forbidden" 403
-  }
-}
-
 *.example.com {
   import tls_porkbun
   import headers
@@ -256,8 +236,6 @@
     import allowed_ip_local_only
   }
   handle @homepage {
-    import authenticate
-
     reverse_proxy homepage:3000
   }
 
@@ -364,9 +342,4 @@
   handle {
     respond "403 Forbidden" 403
   }
-}
-
-http://prowlarr.home.arpa {
-  import common_internal_http
-  import deny_if_not_local 192.168.100.3:9696
 }

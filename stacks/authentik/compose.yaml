@@ -21,7 +21,7 @@ services:
       timeout: 5s
   server:
     container_name: authentik-server
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2026.5.6}
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2026.8.0}
     restart: unless-stopped
     depends_on:
       postgresql:
@@ -47,7 +47,7 @@ services:
     shm_size: 512mb
   worker:
     container_name: authentik-worker
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2026.5.6}
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2026.8.0}
     restart: unless-stopped
     depends_on:
       postgresql:
