@@ -1,0 +1,15 @@
+services:
+  convertx:
+    container_name: convertx
+    image: ghcr.io/c4illin/convertx
+    restart: unless-stopped
+    networks:
+      - proxy-net
+    volumes:
+      - ./data:/app/data
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
+
+networks:
+  proxy-net:
+    external: true

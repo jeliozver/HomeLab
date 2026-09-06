@@ -339,6 +339,14 @@
     reverse_proxy 192.168.100.13:3030
   }
 
+  @convertx {
+    host convertx.int.example.com
+    import allowed_ip_local_only
+  }
+  handle @convertx {
+    reverse_proxy convertx:3000
+  }
+
   handle {
     respond "403 Forbidden" 403
   }
