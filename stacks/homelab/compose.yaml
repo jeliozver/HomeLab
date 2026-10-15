@@ -5,7 +5,7 @@ services:
   # ------------------------
   qbittorrent:
     container_name: qbittorrent
-    image: lscr.io/linuxserver/qbittorrent:5.2.3
+    image: lscr.io/linuxserver/qbittorrent:5.2.4
     restart: unless-stopped
     ports:
       - "5252:5252"
@@ -170,7 +170,7 @@ services:
     user: "${PUID}:${PGID}"
   jellyfin:
     container_name: jellyfin
-    image: jellyfin/jellyfin
+    image: jellyfin/jellyfin:12.1
     restart: 'unless-stopped'
     networks:
       - proxy-net
