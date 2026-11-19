@@ -268,28 +268,6 @@ services:
     environment:
       - APP_URL=https://beszel.example.com
     user: "${PUID}:${PGID}"
-  wyl:
-    container_name: wyl
-    image: aceberg/watchyourlan
-    restart: unless-stopped
-    network_mode: "host"
-    volumes:
-      - ${APPS_BASE_PATH}/wyl:/data/WatchYourLAN
-    environment:
-      TZ: TZ=${TZ}
-      IFACES: "wlan0 eth0"
-  epg:
-    container_name: epg
-    image: ghcr.io/iptv-org/epg:master
-    restart: unless-stopped
-    networks:
-      - proxy-net
-    volumes:
-      - ${APPS_BASE_PATH}/epg:/epg/public
-    environment:
-      - DAYS=1
-    ports:
-      - "3000:3000"
 
 networks:
   proxy-net:

@@ -265,14 +265,12 @@
     reverse_proxy dozzle:8080
   }
 
-  @watch-your-lan {
-    host watch-your-lan.int.example.com
+  @lan-orangutan {
+    host lan-orangutan.int.example.com
     import allowed_ip_local_only
   }
-  handle @watch-your-lan {
-    import authenticate
-
-    reverse_proxy 192.168.100.13:8840
+  handle @lan-orangutan {
+    reverse_proxy 192.168.100.13:291
   }
 
   @jotty {
@@ -313,14 +311,6 @@
   }
   handle @uptime-kuma {
     reverse_proxy uptime-kuma:3001
-  }
-
-  @epg {
-    host epg.int.example.com
-    import allowed_ip_local_only
-  }
-  handle @epg {
-    reverse_proxy epg:3000
   }
 
   @dispatcharr {

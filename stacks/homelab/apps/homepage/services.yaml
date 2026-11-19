@@ -296,17 +296,22 @@
             - field: summary.notes.total
               label: Notes
               format: number
-    - WatchYourLan:
-        icon: watchyourlan
-        href: "{{HOMEPAGE_VAR_WATCH_YOUR_LAN_URL}}"
+    - LanOrangutan:
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/png/lan-orangutan.png
+        href: "{{HOMEPAGE_VAR_LAN_ORANGUTAN_URL}}"
         description: Network IP Scanner
         server: raspberry-docker
-        container: wyl
+        container: lan-orangutan
         widget:
           type: customapi
-          url: "{{HOMEPAGE_VAR_WEBHOOK_URL}}/wyl"
+          url: "{{HOMEPAGE_VAR_WEBHOOK_URL}}/lanorangutan"
+          method: POST
           refreshInterval: 300000
-          method: GET
+          headers:
+            Content-Type: 'application/json'
+          requestBody:
+            apiKey: "{{HOMEPAGE_VAR_LAN_API_KEY}}"
+            url: "{{HOMEPAGE_VAR_LAN_ORANGUTAN_URL}}"
           display: block
           mappings:
             - field: Online
@@ -456,10 +461,10 @@
         icon: beszel.png
         href: https://beszel.dev/guide/what-is-beszel
         description: "Beszel Docs"
-    - "WatchYourLAN-Docs":
-        icon: watchyourlan.png
-        href: https://github.com/aceberg/WatchYourLAN
-        description: "WatchYourLAN Docs"
+    - "LANOrangutan-Docs":
+        icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/png/lan-orangutan.png
+        href: https://github.com/291-Group/LAN-Orangutan
+        description: "LANOrangutan Docs"
     - "Fail2Ban Docs":
         icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/png/fail2ban.png
         href: https://github.com/fail2ban/fail2ban
